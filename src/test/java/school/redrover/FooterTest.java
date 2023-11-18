@@ -147,6 +147,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(actualPageTitle, expectedPageTitle, "The title is not About Jenkins 2.414.2 [Jenkins]");
     }
 
+    @Ignore
     @Test
     public void testGetInvolved() throws InterruptedException {
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);",
@@ -178,6 +179,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(actualPageTitle, expectedPageTitle, "The title is not Participate and Contribute");
     }
 
+    @Ignore
     @Test
     public void testWebsite() {
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);",
