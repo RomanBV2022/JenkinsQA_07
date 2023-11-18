@@ -17,7 +17,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 public class FolderTest extends BaseTest {
     private static final String FOLDER_NAME = "FolderName";
-    private static final String FOLDER_NAME_2 = "My new project";
     private static final String NAME_FOR_BOUNDARY_VALUES = "A";
     private static final String RENAMED_FOLDER = "RenamedFolder";
     private static final String NESTED_FOLDER = "Nested";
@@ -75,6 +74,27 @@ public class FolderTest extends BaseTest {
 
         Assert.assertEquals(getDriver().findElement(
                 By.xpath("//td/a[@class='jenkins-table__link model-link inside']")).getText(), NESTED_FOLDER);
+    }
+
+    @Test(dependsOnMethods = {"testCreate", "testRename"})
+    public void testAddDisplayName() {
+        final String folderDisplayName = "Best folder";
+
+        WebElement folder = getDriver().findElement(By.xpath("//*[@id='job_" + RENAMED_FOLDER + "']/td[3]/a"));
+        new Actions(getDriver())
+                .moveToElement(folder)
+                .click()
+                .perform();
+        getDriver().findElement(By.linkText("Configure")).click();
+        getDriver().findElement(By.xpath("//input[@name='_.displayNameOrNull']")).sendKeys(folderDisplayName);
+        getDriver().findElement(By.name("Submit")).click();
+        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
+
+        String actualFolderName = getDriver()
+                .findElement(By.xpath("//*[@id='job_" + RENAMED_FOLDER + "']/td[3]/a/span"))
+                .getText();
+
+        Assert.assertEquals(actualFolderName, folderDisplayName);
     }
 
     @Test(dependsOnMethods = "testMoveFolderToFolder")
@@ -202,27 +222,6 @@ public class FolderTest extends BaseTest {
         boolean okButtonDisabled = "true".equals(okButton.getAttribute("disabled"));
 
         Assert.assertTrue(okButtonDisabled, "OK button is clickable when it shouldn't be!");
-    }
-
-    @Ignore
-    @Test(dependsOnMethods = "testCreate")
-    public void testAddDisplayName() {
-
-        WebElement folder = getDriver().findElement(By.xpath("//tr[@id = 'job_" + RENAMED_FOLDER + "']"));
-        new Actions(getDriver())
-                .moveToElement(folder)
-                .click()
-                .perform();
-        getDriver().findElement(By.linkText("Configure")).click();
-        getDriver().findElement(By.xpath("//input[@name='_.displayNameOrNull']")).sendKeys(FOLDER_NAME_2);
-        getDriver().findElement(By.name("Submit")).click();
-        getDriver().findElement(By.xpath("//a[text()='Dashboard']")).click();
-
-        String actualFolderName = getDriver()
-                .findElement(By.xpath("//*[@id='job_" + FOLDER_NAME_2 + "']/td[3]/a/span"))
-                .getText();
-
-        Assert.assertEquals(actualFolderName, FOLDER_NAME_2);
     }
 
     @Ignore
