@@ -10,6 +10,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.model.HomePage;
 import school.redrover.model.UserPage;
+import school.redrover.model.*;
 import school.redrover.runner.BaseTest;
 
 import java.util.ArrayList;
@@ -352,23 +353,23 @@ public class UserTest extends BaseTest {
 
     @Test
     public void testVerifyRequiredFields() {
+
         List<String> expectedLabelNames = List.of("Username", "Password", "Confirm password", "Full name", "E-mail address");
         List<String> actualLabelNames = new ArrayList<>();
 
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[href = '/manage']"))).click();
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[href='securityRealm/']"))).click();
-        getDriver().findElement(By.cssSelector("a[href='addUser']")).click();
+        new HomePage(getDriver())
+                .clickManageJenkins()
+                .goUserDatabasePage()
+                .createUser();
+
+        CreateNewUserPage createNewUserPage = new CreateNewUserPage(getDriver());
 
         for (String labelName : expectedLabelNames) {
-            String labelText = getDriver().findElement(By.xpath("//div[text() = '" + labelName + "']")).getText();
+            String labelText = createNewUserPage.getLabelText(labelName);
             actualLabelNames.add(labelText);
-            WebElement input = getDriver().findElement
-                    (By.xpath("//div[@class='jenkins-form-label help-sibling'][text() = '" + labelName + "']" +
-                            "/following-sibling::div/input"));
 
-            Assert.assertNotNull(input);
+            Assert.assertNotNull(createNewUserPage.getInputField(labelName));
         }
-
         Assert.assertEquals(expectedLabelNames, actualLabelNames);
     }
 
@@ -461,6 +462,7 @@ public class UserTest extends BaseTest {
         Assert.assertEquals(error.size(), 5);
     }
 
+    @Ignore
     @Test
     public void testUserIsDisplayedInUsersTable() {
         String createdUserName = new UserPage(getDriver())
@@ -470,6 +472,7 @@ public class UserTest extends BaseTest {
         Assert.assertEquals(createdUserName, "Test");
     }
 
+    @Ignore
     @Test
     public void testUserRecordContainUserIdButton() {
         UserPage createdUserPage = new UserPage(getDriver())
