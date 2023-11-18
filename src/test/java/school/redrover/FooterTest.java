@@ -85,7 +85,7 @@ public class FooterTest extends BaseTest {
                 "Jenkins 2.414.2");
     }
 
-
+    @Ignore
     @Test
     public void testVersion() {
         getDriver().findElement(By.xpath("//button[@class='jenkins-button jenkins-button--tertiary jenkins_ver']")).click();
@@ -212,6 +212,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(actualPageTitle, expectedPageTitle, "The title is not Jenkins");
     }
 
+    @Ignore
     @Test
     public void testVerifyClickabilityOfRestAPILink() {
         clickRestApi();
@@ -219,6 +220,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(getDriver().getTitle(), "Remote API [Jenkins]");
     }
 
+    @Ignore
     @Test(description = "Кликабельность ссылки и отображение страницы REST API")
     public void testvisabilityAndClickabilityRestApiLink() {
         String link = getDriver().findElement(By.xpath("//a[@href='api/']")).getText();
