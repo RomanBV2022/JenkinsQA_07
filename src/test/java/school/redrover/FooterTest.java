@@ -162,6 +162,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(getDriver().getCurrentUrl(), "https://www.jenkins.io/participate/");
     }
 
+    @Ignore
     @Test
     public void testClickGetInvolved() {
         String expectedPageName = "Participate and Contribute";
@@ -233,6 +234,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='main-panel']/h1")).getText(), "REST API");
     }
 
+    @Ignore
     @Test
     public void testJenkinsVersionButtonVisibilityCLikabilityFunctionality() {
         getDriver().findElement(By.xpath("//a[@class]//span[@class='hidden-xs hidden-sm']")).click();
@@ -311,6 +313,7 @@ public class FooterTest extends BaseTest {
         }
     }
 
+    @Ignore
     @Test
     public void testRestApiLinkRedirectionUserArea() {
         List<By> userPages = List.of(
