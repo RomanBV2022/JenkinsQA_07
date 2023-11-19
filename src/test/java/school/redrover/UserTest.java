@@ -233,6 +233,50 @@ public class UserTest extends BaseTest {
 
     }
 
+    @Test
+    public void testConfigureAddDescriptionFromPeoplePage() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href = '/asynchPeople/']"))).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href = '/user/admin/']"))).click();
+
+        getDriver().findElement(By.xpath("//a[@href = '/user/admin/configure']")).click();
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='_.description']"))).clear();
+        getDriver().findElement(By.xpath("//textarea[@name='_.description']")).sendKeys(DESCRIPTION);
+        getDriver().findElement(By.name("Submit")).click();
+
+        Assert.assertEquals(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//div[@id = 'description']/div[1]"))).getText(), DESCRIPTION);
+    }
+
+    @Test
+    public void testConfigureAddDescriptionFromManageJenkinsPage() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href = '/manage']"))).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href = 'securityRealm/']"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href = 'user/admin/configure']"))).click();
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='_.description']"))).clear();
+        getDriver().findElement(By.xpath("//textarea[@name='_.description']")).sendKeys(DESCRIPTION);
+        getDriver().findElement(By.name("Submit")).click();
+
+        Assert.assertEquals(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//div[@id = 'description']/div[1]"))).getText(), DESCRIPTION);
+    }
+
+    @Test
+    public void testConfigureAddDescriptionUsingDirectLinkInHeader() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href = '/user/admin']"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href = '/user/admin/configure']"))).click();
+
+        getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='_.description']"))).clear();
+        getDriver().findElement(By.xpath("//textarea[@name='_.description']")).sendKeys(DESCRIPTION);
+        getDriver().findElement(By.name("Submit")).click();
+
+        Assert.assertEquals(
+                getWait2().until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//div[@id = 'description']/div[1]"))).getText(), DESCRIPTION);
+    }
+
     @Test(dependsOnMethods = "testConfigureUser")
     public void testDeleteUser() {
 
@@ -468,17 +512,15 @@ public class UserTest extends BaseTest {
         Assert.assertEquals(error.size(), 5);
     }
 
-    @Ignore
     @Test
     public void testUserIsDisplayedInUsersTable() {
-        String createdUserName = new UserPage(getDriver())
+        List<String> createdUserName = new UserPage(getDriver())
             .createUserSuccess("Test")
-            .getCreatedUserName();
+            .userNameList();
 
-        Assert.assertEquals(createdUserName, "Test");
+        Assert.assertTrue(createdUserName.contains("Test"));
     }
 
-    @Ignore
     @Test
     public void testUserRecordContainUserIdButton() {
         UserPage createdUserPage = new UserPage(getDriver())
@@ -630,5 +672,15 @@ public class UserTest extends BaseTest {
 
         Assert.assertTrue(getDriver().findElement(
                 By.xpath("//div[contains(text(), 'Invalid')]")).isDisplayed(), "Invalid username or password");
+    }
+
+    @Test
+    public void testVerifyDisplayedUserAfterCreateUser () {
+        String password = "1234567";
+        String email = "test@gmail.com";
+        createUser(USER_NAME, password, email);
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//table[@id='people']/tbody")).
+                getText().contains(USER_NAME), true);
     }
 }
