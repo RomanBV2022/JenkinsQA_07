@@ -1,6 +1,5 @@
 package school.redrover.model;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -42,9 +41,8 @@ public class AllCreateProjectPage extends BasePage {
 
 
 
-    public String writeNameOfProject(String name){
+    public void writeNameOfProject(String name){
         inputNameOfProject.sendKeys(name);
-        return name;
     }
     public void clickCreateGenerallyProject(){
         createGenerallyProject.click();
