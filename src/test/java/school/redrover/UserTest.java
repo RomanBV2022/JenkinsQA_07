@@ -661,4 +661,14 @@ public class UserTest extends BaseTest {
         Assert.assertTrue(getDriver().findElement(
                 By.xpath("//div[contains(text(), 'Invalid')]")).isDisplayed(), "Invalid username or password");
     }
+
+    @Test
+    public void testVerifyDisplayedUserAfterCreateUser () {
+        String password = "1234567";
+        String email = "test@gmail.com";
+        createUser(USER_NAME, password, email);
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//table[@id='people']/tbody")).
+                getText().contains(USER_NAME), true);
+    }
 }
