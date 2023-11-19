@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import school.redrover.model.AllCreateProjectPage;
+import school.redrover.model.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.Arrays;
@@ -235,20 +237,28 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreatePipelineProject() {
+        final String PipelineName = "MyPipeline";
 
-        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        HomePage homePage = new HomePage(getDriver());
+        homePage.clickNewItem();
 
-        WebElement nameField = getDriver().findElement(By.xpath("//input[@name='name']"));
-        nameField.clear();
-        nameField.sendKeys("MyPipeline");
+        AllCreateProjectPage allCreateProjectPage = new AllCreateProjectPage(getDriver());
+        allCreateProjectPage.writeNameOfProject(PipelineName);
 
-        getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
+        allCreateProjectPage.clickCreatePipelineProject();
 
-        getDriver().findElement(By.xpath("//button[@id='ok-button']")).click();
+        allCreateProjectPage.clickButtonSubmit();
 
-        getDriver().findElement(By.xpath("//li/a[@href='/']")).click();
+        allCreateProjectPage.clickDashboard();
 
         Assert.assertTrue(getDriver().findElement(By.xpath("//a[@href='job/MyPipeline/']")).isDisplayed());
+
+    }
+
+    @Test
+    public void testDeletePipeline() {
+        testCreatePipelineProject();
+        getDriver().findElement(By.xpath("//a[@href='job/MyPipeline/'])")).click();
 
     }
 
