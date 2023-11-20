@@ -9,8 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import school.redrover.model.AllCreateProjectPage;
 import school.redrover.model.HomePage;
+import school.redrover.model.PipelineConfigurationPage;
 import school.redrover.runner.BaseTest;
 
 import java.util.Arrays;
@@ -239,21 +239,14 @@ public class PipelineTest extends BaseTest {
     public void testCreatePipelineProject() {
         final String PipelineName = "MyPipeline";
 
-        HomePage homePage = new HomePage(getDriver());
-        homePage.clickNewItem();
-       // homePage.clickJobByName(PIPELINE_NAME, AllCreateProjectPage.class);
-
-        AllCreateProjectPage allCreateProjectPage = new AllCreateProjectPage(getDriver());
-        allCreateProjectPage.writeNameOfProject(PipelineName);
-
-        allCreateProjectPage.clickCreatePipelineProject();
-
-        allCreateProjectPage.clickButtonSubmit();
-
-        allCreateProjectPage.clickDashboard();
-
-        Assert.assertTrue(getDriver().findElement(By.xpath("//a[@href='job/MyPipeline/']")).isDisplayed());
-
+        List<String> jobList = new HomePage(getDriver())
+                .clickNewItem()
+                .typeItemName(PipelineName)
+                .selectPipelineProject()
+                .clickOk(new PipelineConfigurationPage(getDriver()))
+                .goHomePage()
+                .getJobList();
+        Assert.assertTrue(jobList.contains(PipelineName));
     }
 
     @Test

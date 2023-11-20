@@ -33,6 +33,9 @@ public class NewItemPage extends BasePage {
     @FindBy(className = "com_cloudbees_hudson_plugins_folder_Folder")
     private WebElement folder;
 
+    @FindBy(xpath = "//span[text()='Pipeline']")
+    private WebElement createPipelineProject;
+
     public NewItemPage(WebDriver driver) {
         super(driver);
     }
@@ -101,4 +104,10 @@ public class NewItemPage extends BasePage {
 
         return this;
     }
+
+    public NewItemPage selectPipelineProject(){
+        createPipelineProject.click();
+        return this;
+    }
+
 }
