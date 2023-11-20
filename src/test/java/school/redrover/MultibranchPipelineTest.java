@@ -12,6 +12,7 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.model.HomePage;
+import school.redrover.model.MultibranchPipelineConfigurationPage;
 import school.redrover.model.MultibranchPipelineDetailsPage;
 import school.redrover.runner.BaseTest;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -111,19 +112,20 @@ public class MultibranchPipelineTest extends BaseTest {
 
         createMultibranchPipelineAndClickDashboard(MULTIBRANCH_PIPELINE_NAME);
 
-        getDriver().findElement(By.xpath("//span[contains(text(),'" + MULTIBRANCH_PIPELINE_NAME + "')]")).click();
-        getDriver().findElement(By.xpath("//a[@href='/job/" + MULTIBRANCH_PIPELINE_NAME + "/confirm-rename']")).click();
-        getDriver().findElement(By.xpath("//div[@class ='setting-main']/input")).clear();
-        getDriver().findElement(By.xpath("//div[@class ='setting-main']/input")).sendKeys(MULTIBRANCH_PIPELINE_NEW_NAME);
-        getDriver().findElement(By.xpath("//*[@id='bottom-sticker']/div/button")).click();
+        String expectedResultName = new HomePage(getDriver())
+                .clickJobByName(MULTIBRANCH_PIPELINE_NAME, new MultibranchPipelineConfigurationPage(getDriver()))
+                .confirmRename(MULTIBRANCH_PIPELINE_NAME)
+                .clearField()
+                .inputName(MULTIBRANCH_PIPELINE_NEW_NAME)
+                .buttonSubmit()
+                .getJobName();
 
-        Assert.assertTrue(getDriver().findElement(
-                By.xpath("//h1")).getText().contains(MULTIBRANCH_PIPELINE_NEW_NAME));
+        String nameH1 = new MultibranchPipelineConfigurationPage(getDriver()).headerName();
 
-        String breadcrumbName = getDriver().findElement(
-                By.xpath("//a[@class='model-link'][contains(@href, 'job')]")).getText();
-        Assert.assertEquals(breadcrumbName, MULTIBRANCH_PIPELINE_NEW_NAME,
-                breadcrumbName + MULTIBRANCH_PIPELINE_NEW_NAME);
+        Assert.assertTrue(nameH1.contains(MULTIBRANCH_PIPELINE_NEW_NAME));
+
+        Assert.assertEquals(expectedResultName, MULTIBRANCH_PIPELINE_NEW_NAME,
+                expectedResultName + MULTIBRANCH_PIPELINE_NEW_NAME);
     }
 
     @Test(dependsOnMethods = "testMultibranchPipelineCreationWithCreateAJob")
@@ -165,14 +167,9 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertEquals(twoUnsafeCharsErrorMessage, "‘#’ is an unsafe character");
     }
 
-    @Ignore
     @Test
     public void testAllTaskTextInSidebar() {
-        createMultibranchPipelineAndClickDashboard(MULTIBRANCH_PIPELINE_NAME);
-
-        getDriver().findElement(By.cssSelector("a[class='jenkins-table__link model-link inside']")).click();
-
-        List<String> taskText = List.of(
+        final List<String> expectedTasksText = List.of(
                 "Status",
                 "Configure",
                 "Scan Multibranch Pipeline Log",
@@ -184,12 +181,13 @@ public class MultibranchPipelineTest extends BaseTest {
                 "Pipeline Syntax",
                 "Credentials");
 
-        int a = 1;
-        for (String expectedText : taskText) {
-            Assert.assertEquals(
-                    getDriver().findElement(By.xpath("//div[@id='tasks']/div[" + a++ + "]")).getText(),
-                    expectedText);
-        }
+        createMultibranchPipelineAndClickDashboard(MULTIBRANCH_PIPELINE_NAME);
+
+        List<String> actualTasksText = new HomePage(getDriver())
+                .clickJobByName(MULTIBRANCH_PIPELINE_NAME, new MultibranchPipelineDetailsPage(getDriver()))
+                .getTasksText();
+
+        Assert.assertEquals(actualTasksText, expectedTasksText);
     }
 
     @Test
