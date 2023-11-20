@@ -129,10 +129,18 @@ public class HomePage extends BasePage {
         return getDriver().getTitle();
     }
 
-    public String getHeadLineText() {
 
+    public String getProjectBuildStatusByName(String projectName) {
+        return getDriver()
+                .findElement(By.id("job_" + projectName))
+                .findElement(By.className("svg-icon"))
+                .getAttribute("tooltip");
+    }
+
+    public String getHeadLineText() {
         return getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
     }
+  
     public <T> T clickAnyJobCreated(T page) {
         getDriver().findElement(By.xpath("//a[@class = 'jenkins-table__link model-link inside']")).click();
 
