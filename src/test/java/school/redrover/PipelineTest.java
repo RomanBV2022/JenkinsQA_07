@@ -241,6 +241,7 @@ public class PipelineTest extends BaseTest {
 
         HomePage homePage = new HomePage(getDriver());
         homePage.clickNewItem();
+       // homePage.clickJobByName(PIPELINE_NAME, AllCreateProjectPage.class);
 
         AllCreateProjectPage allCreateProjectPage = new AllCreateProjectPage(getDriver());
         allCreateProjectPage.writeNameOfProject(PipelineName);
