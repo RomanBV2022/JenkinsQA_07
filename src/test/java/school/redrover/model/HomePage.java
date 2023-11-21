@@ -12,8 +12,6 @@ import school.redrover.model.base.BasePage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
-
 public class HomePage extends BasePage {
 
     @FindBy(xpath = "//a[@href='computer/new']")
@@ -36,7 +34,7 @@ public class HomePage extends BasePage {
     }
 
     public <T> T clickJobByName(String name, T page) {
-        getDriver().findElement(By.xpath("//*[@id='job_" + name + "']/td[3]/a")).click();
+        getDriver().findElement(By.xpath("//td/a[@href='job/" + name + "/']")).click();
 
         return page;
     }
@@ -177,7 +175,7 @@ public class HomePage extends BasePage {
         WebElement projectName = getDriver().findElement(By.xpath("//span[text()='" + name + "']"));
 
         new Actions(getDriver())
-            .moveToElement(projectName).click().perform();
+                .moveToElement(projectName).click().perform();
 
         return this;
     }
@@ -187,6 +185,12 @@ public class HomePage extends BasePage {
 
         return new OrganizationFolderRenamePage(getDriver());
     }
+
+    public String getJobInsideFolder() {
+
+        return getDriver().findElement(By.xpath("//div[@id='main-panel']//h1")).getText();
+    }
+
     public <T> T clickRenameInDropdownMenu(String jobName, T page) {
         new Actions(getDriver())
                 .moveToElement(getDriver()
