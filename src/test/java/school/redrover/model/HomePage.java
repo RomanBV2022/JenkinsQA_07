@@ -27,6 +27,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[@href='/computer/']")
     private WebElement buildExecutorStatus;
 
+    @FindBy(xpath = "//a[contains(@href, '/confirm-rename')]")
+    private WebElement renameOptionProjectDropdown;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -169,4 +172,18 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public HomePage hoverOverJobDropdownMenu(String name) {
+        WebElement projectName = getDriver().findElement(By.xpath("//span[text()='" + name + "']"));
+
+        new Actions(getDriver())
+            .moveToElement(projectName).click().perform();
+
+        return this;
+    }
+
+    public OrganizationFolderRenamePage clickRenameOrganizationFolderDropdownMenu() {
+        renameOptionProjectDropdown.click();
+
+        return new OrganizationFolderRenamePage(getDriver());
+    }
 }
