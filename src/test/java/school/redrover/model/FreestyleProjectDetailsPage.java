@@ -92,4 +92,9 @@ public class FreestyleProjectDetailsPage extends BasePage {
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
         return new FreestyleProjectDetailsPage(getDriver());
     }
+
+    public boolean isJobExist() {
+
+        return getDriver().findElement(By.xpath("//div[@id='main-panel']//h1")).isDisplayed();
+    }
 }
