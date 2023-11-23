@@ -637,11 +637,12 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testDeleteFreestyleProjectSideMenu() {
-        getDriver().findElement(LOCATOR_CREATED_JOB_LINK_MAIN_PAGE).click();
-        getDriver().findElement(By.xpath("//span[contains(text(), 'Delete Project')]/..")).click();
-        getDriver().switchTo().alert().accept();
+        boolean projectExist = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .deleteProject()
+                .isProjectExist(PROJECT_NAME);
 
-        Assert.assertTrue(getDriver().findElements(By.id("job_" + PROJECT_NAME)).isEmpty());
+        Assert.assertFalse(projectExist);
     }
 
     @Test
