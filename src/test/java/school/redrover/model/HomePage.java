@@ -35,7 +35,6 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[contains(@class,'jenkins-table__link')]")
     private WebElement jobName;
 
-
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -217,4 +216,5 @@ public class HomePage extends BasePage {
         getWait5().until(ExpectedConditions.elementToBeClickable(jobName)).click();
         return new FreestyleProjectDetailsPage(getDriver());
     }
+
 }
