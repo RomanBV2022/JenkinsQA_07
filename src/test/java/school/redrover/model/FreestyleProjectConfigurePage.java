@@ -50,6 +50,12 @@ public class FreestyleProjectConfigurePage extends BasePage {
     @FindBy(xpath = "//textarea[@name='description']")
     private WebElement inputProjectDescription;
 
+    @FindBy(xpath = "//label[contains(text(), 'This project is parameterized')]")
+    private WebElement getThisProjectIsParameterizedCheckbox;
+
+    @FindBy(xpath = "//label[contains(text(), 'This project is parameterized')]/../input")
+    private WebElement getThisProjectIsParameterizedCheckboxInput;
+
     @FindBy(xpath = "//a[@previewendpoint = '/markupFormatter/previewDescription']")
     private WebElement previewDescription;
 
@@ -196,6 +202,15 @@ public class FreestyleProjectConfigurePage extends BasePage {
         inputProjectDescription.clear();
         inputProjectDescription.sendKeys(editDescription);
         return new FreestyleProjectConfigurePage(getDriver());
+    }
+
+    public FreestyleProjectConfigurePage clickThisProjectIsParameterizedCheckbox() {
+        getThisProjectIsParameterizedCheckbox.click();
+        return this;
+    }
+
+    public WebElement getThisProjectIsParameterizedCheckbox() {
+        return getThisProjectIsParameterizedCheckboxInput;
     }
 
     public FreestyleProjectConfigurePage inputDescription(String description) {
