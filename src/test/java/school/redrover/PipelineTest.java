@@ -81,9 +81,9 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreateWithEmptyName() {
-        NewItemPage newItemPage = new HomePage(getDriver()).
-                clickNewItem().
-                selectPipelineProject();
+        NewItemPage newItemPage = new HomePage(getDriver())
+                .clickNewItem()
+                .selectPipelineProject();
 
         Assert.assertEquals(newItemPage.getRequiredNameErrorMessage(), "» This field cannot be empty, please enter a valid name");
         Assert.assertFalse(newItemPage.isOkButtonEnabled());
@@ -126,23 +126,18 @@ public class PipelineTest extends BaseTest {
 
     }
 
-    @Ignore
     @Test
     public void testPipelineRename() {
-        final String pipelineName = "PipelineName";
-        final String newPipelineName = "NewPipelineName";
+        String currentName = new HomePage(getDriver())
+                .clickNewItem()
+                .createPipelineProject(JOB_NAME)
+                .clickRenameOnSideMenu()
+                .enterNewName(PIPELINE_NAME)
+                .clickRenameButton()
+                .goHomePage()
+                .getJobDisplayName();
 
-        createPipeline(pipelineName, true);
-
-        getDriver().findElement(By.xpath("//span[contains(text(),'" + pipelineName + "')]")).click();
-        getDriver().findElement(By.xpath("//a[contains(@href,'rename')]")).click();
-
-        getDriver().findElement(By.name("newName")).sendKeys(Keys.CONTROL + "a");
-        getDriver().findElement(By.name("newName")).sendKeys(newPipelineName);
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
-
-        String confirmingName = getDriver().findElement(By.xpath("//h1")).getText();
-        Assert.assertEquals(confirmingName, "Pipeline " + newPipelineName);
+        Assert.assertEquals(currentName, PIPELINE_NAME);
     }
 
     @Test
