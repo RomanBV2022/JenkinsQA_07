@@ -35,6 +35,10 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[contains(@class,'jenkins-table__link')]")
     private WebElement jobName;
 
+
+    @FindBy(xpath = "//div[@class = 'jenkins-table__cell__button-wrapper']/a[contains(@aria-describedby,'tippy')]")
+    private WebElement runningBuildIndicator;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -174,6 +178,7 @@ public class HomePage extends BasePage {
 
     public HomePage clickBuildByGreenArrow(String name) {
         getDriver().findElement(By.xpath("//a[@href='job/" + name + "/build?delay=0sec']")).click();
+        getWait5().until(ExpectedConditions.invisibilityOf(runningBuildIndicator));
 
         return this;
     }
