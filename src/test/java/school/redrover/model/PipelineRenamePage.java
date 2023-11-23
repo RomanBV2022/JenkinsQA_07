@@ -7,7 +7,7 @@ import school.redrover.model.base.BasePage;
 
 public class PipelineRenamePage extends BasePage {
 
-    @FindBy(name = "newName")
+    @FindBy(xpath = "//input[@name='newName']")
     private WebElement inputName;
 
     @FindBy(name = "Submit")
@@ -24,9 +24,16 @@ public class PipelineRenamePage extends BasePage {
         return this;
     }
 
-    public PipelinePage clickRenameButton() {
+    public PipelineRenamePage clearInputName() {
+        inputName.clear();
+
+        return this;
+    }
+
+    public <T> T clickRenameButton(T page) {
         renameButton.click();
 
-        return new PipelinePage(getDriver());
+        return page;
     }
+
 }
