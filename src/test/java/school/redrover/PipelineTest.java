@@ -145,7 +145,7 @@ public class PipelineTest extends BaseTest {
                 .clickRenameOnSideMenu()
                 .clearInputName()
                 .clickRenameButton(new ErrorPage(getDriver()))
-                .getErrorMessage();
+                .getErrorFromMainPanel();
 
         Assert.assertEquals(errorMessage, "Error" + '\n' + "No name is specified");
     }
