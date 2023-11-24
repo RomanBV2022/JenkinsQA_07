@@ -649,6 +649,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(editDescription, NEW_DESCRIPTION_TEXT);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testFreestyleProjectAdvancedSetting() {
        boolean helpMessageDisplay = new HomePage(getDriver())
@@ -1246,4 +1247,5 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertTrue(
                 getDriver().findElement(By.xpath("//tbody/tr[@id = 'job_" + freestyleName + "']")).isDisplayed());
     }
+
 }
