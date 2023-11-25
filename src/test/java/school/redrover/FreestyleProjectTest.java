@@ -195,6 +195,15 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
+    public void testDeleteFreestyleProjectSideMenu() {
+        boolean projectExist = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .deleteProject()
+                .isProjectExist(PROJECT_NAME);
+
+        Assert.assertFalse(projectExist);
+    }
+    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testRenameProject() {
         final HomePage homePage = new HomePage(getDriver())
                 .goHomePage()
@@ -611,16 +620,6 @@ public class FreestyleProjectTest extends BaseTest {
                 .stream().map(WebElement::getText).toList();
 
         Assert.assertEquals(buildsList.get(buildsList.size() - 1), "#2");
-    }
-
-    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
-    public void testDeleteFreestyleProjectSideMenu() {
-        boolean projectExist = new HomePage(getDriver())
-                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
-                .deleteProject()
-                .isProjectExist(PROJECT_NAME);
-
-        Assert.assertFalse(projectExist);
     }
 
     @Ignore("Expected condition failed: waiting for element to be clickable")
