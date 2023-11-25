@@ -666,8 +666,7 @@ public class FreestyleProjectTest extends BaseTest {
         String editedProjectName = PROJECT_NAME.replace(" ", "%20");
 
         String currentUrl = new HomePage(getDriver())
-                .wait10UntilVisibilityOfJob(PROJECT_NAME)
-                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickOnJob()
                 .getCurrentUrl();
 
         Assert.assertTrue(currentUrl.contains("/job/" + editedProjectName));
