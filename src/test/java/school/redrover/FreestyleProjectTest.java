@@ -194,12 +194,9 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(homePage, PROJECT_NAME);
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testRenameProject() {
-        new HomePage(getDriver())
-                .clickNewItem()
-                .createFreestyleProject(PROJECT_NAME)
-                .clickSaveButton()
+        final HomePage homePage = new HomePage(getDriver())
                 .goHomePage()
                 .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .clickRenameItem()

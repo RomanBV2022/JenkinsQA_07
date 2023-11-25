@@ -28,7 +28,7 @@ public class FreestyleProjectDetailsPage extends BasePage {
     @FindBy(linkText = "Status")
     private WebElement statusPageLink;
 
-    @FindBy(linkText = "Rename")
+    @FindBy(xpath = "//*[@id=\"tasks\"]/div[7]/span/a")
     private WebElement renamePageLink;
 
     @FindBy(xpath = "//a[@href='lastBuild/']")
