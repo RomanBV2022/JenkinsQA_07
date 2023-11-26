@@ -1,9 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
@@ -15,7 +13,6 @@ import school.redrover.runner.TestUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PipelineTest extends BaseTest {
     private static final String JOB_NAME = "NewPipeline";
@@ -24,40 +21,8 @@ public class PipelineTest extends BaseTest {
     private static final String CHECKBOX_TEXT = "Do not allow concurrent build";
     private final String PIPELINE_NAME = "Name of the pipe";
 
-    private void createPipeline(String pipelineName, boolean returnToDashboard) {
-        getDriver().findElement(By.xpath("//a[@href = '/view/all/newJob']")).click();
-        getDriver().findElement(By.className("jenkins-input")).sendKeys(pipelineName);
-        getDriver().findElement(By.className("org_jenkinsci_plugins_workflow_job_WorkflowJob")).click();
-        getDriver().findElement(By.xpath("//button[@id = 'ok-button']")).click();
-
-        if (returnToDashboard) {
-            goToDashboard();
-        }
-    }
-
-    private void clickSaveConfiguration() {
-        getDriver().findElement(By.xpath("//button[@name = 'Submit']")).click();
-    }
-
-
-
-    private void clickConfigure() {
-        getDriver().findElement(By.xpath("//a[@class='task-link ' and contains(@href, 'configure')]"))
-                .click();
-    }
-
-    private void goToDashboard() {
-        getDriver().findElement(By.id("jenkins-home-link")).click();
-    }
-
-    private void clickProjectOnDashboard(String projectName) {
-        getDriver().findElement(By
-                .xpath(String.format("//a[@href='job/%s/']", projectName.replace(" ", "%20")))).click();
-    }
-
     @Test
     public void testCreatePipeline() {
-
         boolean pipeLineCreated = new HomePage(getDriver())
                 .clickNewItem()
                 .typeItemName(PIPELINE_NAME)
@@ -100,7 +65,7 @@ public class PipelineTest extends BaseTest {
     @Ignore
     @Test
     public void testCreateWithDuplicateName() {
-        createPipeline(JOB_NAME, true);
+        TestUtils.createPipeline(this, JOB_NAME, true);
 
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
@@ -152,7 +117,6 @@ public class PipelineTest extends BaseTest {
 
     @Test
     public void testCreatePipelineProject() {
-
         List<String> jobList = new HomePage(getDriver())
                 .clickNewItem()
                 .typeItemName(PIPELINE_NAME)
@@ -164,62 +128,37 @@ public class PipelineTest extends BaseTest {
         Assert.assertTrue(jobList.contains(PIPELINE_NAME));
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testCreatePipeline")
     public void testOpenLogsFromStageView() {
+        String stageLogsText = new HomePage(getDriver())
+                .clickJobByName(PIPELINE_NAME, new PipelineDetailsPage(getDriver()))
+                .clickConfigure()
+                .selectPipelineScriptSampleByValue("hello")
+                .clickSaveButton(new PipelineDetailsPage(getDriver()))
+                .clickBuildNow()
+                .clickLogsInStageView().getStageLogsModalText();
 
-        clickProjectOnDashboard(PIPELINE_NAME);
-        clickConfigure();
-
-        Select select = new Select(getDriver().findElement(By.xpath("//div[@class='samples']/select")));
-        select.selectByValue("hello");
-        clickSaveConfiguration();
-
-        new PipelinePage(getDriver()).clickBuildNow();
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='badge']/a[text()='#1']")));
-        WebElement buildRecordInStageView = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tbody[@class='tobsTable-body']//div[@class='duration']")));
-
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(buildRecordInStageView).perform();
-
-        getWait5().until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class='btn btn-small cbwf-widget cbwf-controller-applied stage-logs']"))).click();
-
-        String consoleLog = getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//pre[@class='console-output']"))).getText();
-        Assert.assertEquals(consoleLog, "Hello World");
+        Assert.assertEquals(stageLogsText, "Hello World");
     }
 
     @Test
     public void testBuildRunTriggeredByAnotherProject() {
-
         final String upstreamPipelineName = "Upstream Pipe";
 
-        createPipeline(PIPELINE_NAME, true);
-        createPipeline(upstreamPipelineName, false);
+        TestUtils.createPipeline(this, PIPELINE_NAME, true);
+        TestUtils.createPipeline(this, upstreamPipelineName, false);
 
-        getDriver().findElement(By.name("Submit")).click();
-        getDriver().findElement(By.xpath("//a[@class='task-link ' and contains(@href, 'configure')]"))
-                .click();
-        WebElement buildAfterOtherProjectsCheckbox = getDriver()
-                .findElement(By.xpath("//label[text()='Build after other projects are built']"));
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].click();", buildAfterOtherProjectsCheckbox);
-        getDriver().findElement(By.name("_.upstreamProjects")).sendKeys(PIPELINE_NAME);
-        WebElement alwaysTriggerRadio = getDriver().findElement(
-                By.xpath("//label[text()='Always trigger, even if the build is aborted']"));
-        js.executeScript("arguments[0].click();", alwaysTriggerRadio);
-        clickSaveConfiguration();
+        boolean isJobInBuildQueue = new PipelineDetailsPage(getDriver())
+                .clickConfigure()
+                .setBuildAfterOtherProjectsCheckbox()
+                .setProjectsToWatch(PIPELINE_NAME)
+                .clickAlwaysTriggerRadio()
+                .clickSaveButton(new PipelineDetailsPage(getDriver()))
+                .goHomePage()
+                .clickBuildByGreenArrow(PIPELINE_NAME)
+                .isJobInBuildQueue(upstreamPipelineName);
 
-        goToDashboard();
-        getDriver().findElement(
-                        By.xpath(String.format("//span[text()='%s']/../../..//a[contains(@href,'build?')]", PIPELINE_NAME)))
-                .click();
-
-        Assert.assertTrue(getWait5().until(ExpectedConditions
-                        .visibilityOfElementLocated(By.xpath("//td[@class='pane pane-grow']")))
-                .getText()
-                .contains(upstreamPipelineName));
+        Assert.assertTrue(isJobInBuildQueue);
     }
 
     @Test
@@ -227,19 +166,14 @@ public class PipelineTest extends BaseTest {
         final List<String> stageNames = List.of(new String[]{"test", "build", "deploy"});
         final String pipelineScript = "stage('test') {}\nstage('build') {}\nstage('deploy') {}";
 
-        createPipeline(PIPELINE_NAME, false);
+        TestUtils.createPipeline(this, PIPELINE_NAME, false);
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].scrollIntoView(true)", getDriver().findElement(By.xpath("//div[@class='ace_line']")));
-        getDriver().findElement(By.className("ace_text-input")).sendKeys(pipelineScript);
-        clickSaveConfiguration();
-        new PipelinePage(getDriver()).clickBuildNow();
-
-        List<String> actualStageNames = getDriver()
-                .findElements(By.xpath("//th[contains(@class, 'stage-header-name-')]"))
-                .stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
+        List<String> actualStageNames = new PipelineDetailsPage(getDriver())
+                .clickConfigure()
+                .setPipelineScript(pipelineScript)
+                .clickSaveButton(new PipelineDetailsPage(getDriver()))
+                .clickBuildNow()
+                .getStagesNames();
 
         Assert.assertEquals(actualStageNames, stageNames);
     }
@@ -248,37 +182,29 @@ public class PipelineTest extends BaseTest {
     public void testBuildWithStringParameter() {
         final String parameterName = "textParam";
         final String parameterValue = "some text";
-        final String scriptText = String.format("stage('test') {\necho \"${%s}\"\n", parameterName);
+        final String pipelineScript = String.format("stage('test') {\necho \"${%s}\"\n", parameterName);
 
-        createPipeline(PIPELINE_NAME, false);
+        TestUtils.createPipeline(this, PIPELINE_NAME, false);
 
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].click()",
-                getDriver().findElement(By.xpath("//label[text()='This project is parameterized']")));
-        WebElement addParameterBtn = getWait5().until(ExpectedConditions
-                .visibilityOfElementLocated(By.id("yui-gen1-button")));
-        js.executeScript("arguments[0].scrollIntoView(true)",
-                getDriver().findElement(By.xpath("//label[text()='This project is parameterized']")));
-        addParameterBtn.click();
-        getDriver().findElement(By.id("yui-gen10")).click();
+        String logsText = new PipelineDetailsPage(getDriver())
+                .clickConfigure()
+                .clickProjectIsParameterized()
+                .clickAddParameter()
+                .selectStringParameter()
+                .setParameterName(parameterName)
+                .setPipelineScript(pipelineScript)
+                .clickSaveButton(new PipelineDetailsPage(getDriver()))
+                .clickBuildWithParameters()
+                .setStringParameterValue(parameterValue)
+                .clickBuildButton(new PipelineDetailsPage(getDriver()))
+                .clickLogsInStageView()
+                .getStageLogsModalText();
 
-        getDriver().findElement(By.name("parameter.name")).sendKeys(parameterName);
-        getDriver().findElement(By.className("ace_text-input")).sendKeys(scriptText);
-        clickSaveConfiguration();
-
-        new PipelinePage(getDriver()).clickBuildNow();
-        getDriver().findElement(By.name("value")).sendKeys(parameterValue);
-        getDriver().findElement(
-                By.xpath("//button[@class='jenkins-button jenkins-button--primary jenkins-!-build-color']")).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='badge']/a[text()='#1']"))).click();
-        getDriver().findElement(By.xpath("//a[contains(@href, '/console')]")).click();
-
-        Assert.assertTrue(getDriver().findElement(By.className("console-output")).getText().contains(parameterValue));
+        Assert.assertTrue(logsText.contains(parameterValue));
     }
 
     @Test
     public void testVerifyChoiceParameterCanBeSet() {
-
         List<String> parameterChoices = Arrays.asList("one", "two");
 
         List<String> buildParameters = new HomePage(getDriver())
