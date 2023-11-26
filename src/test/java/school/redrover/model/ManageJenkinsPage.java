@@ -1,5 +1,7 @@
 package school.redrover.model;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -27,7 +29,7 @@ public class ManageJenkinsPage extends BasePage {
     @FindBy(xpath = "//dl/dt[text()='Plugins']")
     private WebElement plugins;
 
-    @FindBy(css = ".jenkins-search > input")
+    @FindBy(id = "settings-search-bar")
     private WebElement searchInput;
 
     @FindBy(xpath = "//div[@class='jenkins-search__results']/p")
@@ -94,7 +96,7 @@ public class ManageJenkinsPage extends BasePage {
 
     public String getNoResultText() {
 
-        return getWait2().until(ExpectedConditions.visibilityOf(searchNoResults)).getText();
+        return getWait10().until(ExpectedConditions.visibilityOf(searchNoResults)).getText();
     }
 
     public <T> T clickResult(String request, T page) {
@@ -107,5 +109,50 @@ public class ManageJenkinsPage extends BasePage {
 
     public List<String> getResultsList() {
         return getWait10().until(ExpectedConditions.visibilityOfAllElements(searchResults)).stream().map(WebElement::getText).toList();
+    }
+
+    public String getPlaceholderText() {
+        return searchInput.getAttribute("placeholder");
+    }
+
+    public boolean isPlaceholderVisible() {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        String typedInSearchText = (String) js.executeScript("return arguments[0].value;", searchInput);
+
+        if (!getPlaceholderText().isEmpty() && typedInSearchText.isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public ManageJenkinsPage goToSearchFieldUsingShortcut() {
+        getDriver().switchTo().activeElement().sendKeys("/");
+
+        return this;
+    }
+
+    public boolean isSearchFieldActiveElement() {
+
+        return searchInput.equals(getDriver().switchTo().activeElement());
+    }
+
+    public ManageJenkinsPage typeTextBeingInSearchFieldWithoutLocator(String setting) {
+        getDriver().switchTo().activeElement().sendKeys(setting);
+
+        return this;
+    }
+
+    public String getSearchFieldText() {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+
+        return (String) js.executeScript("return arguments[0].value;", searchInput);
+    }
+
+    public boolean isSearchTextAfterShortcutVisible() {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        String typedInSearchText = (String) js.executeScript("return arguments[0].value;", searchInput);
+
+        return !typedInSearchText.isEmpty();
     }
 }
