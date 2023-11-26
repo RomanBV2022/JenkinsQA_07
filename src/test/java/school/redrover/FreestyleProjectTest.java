@@ -195,11 +195,23 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testRenameProject() {
-        new HomePage(getDriver())
+    public void testDeleteFreestyleProjectSideMenu() {
+        String homePage = new HomePage(getDriver())
                 .clickNewItem()
-                .createFreestyleProject(PROJECT_NAME)
+                .createFreestyleProject("other" + PROJECT_NAME)
                 .clickSaveButton()
+                .goHomePage()
+                .getJobDisplayName();
+        boolean projectExist = new HomePage(getDriver())
+                .clickJobByName("other" + PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .deleteProject()
+                .isProjectExist("other" + PROJECT_NAME);
+
+        Assert.assertFalse(projectExist);
+    }
+    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
+    public void testRenameProject() {
+        final HomePage homePage = new HomePage(getDriver())
                 .goHomePage()
                 .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .clickRenameItem()
@@ -614,16 +626,6 @@ public class FreestyleProjectTest extends BaseTest {
                 .stream().map(WebElement::getText).toList();
 
         Assert.assertEquals(buildsList.get(buildsList.size() - 1), "#2");
-    }
-
-    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
-    public void testDeleteFreestyleProjectSideMenu() {
-        boolean projectExist = new HomePage(getDriver())
-                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
-                .deleteProject()
-                .isProjectExist(PROJECT_NAME);
-
-        Assert.assertFalse(projectExist);
     }
 
     @Ignore("Expected condition failed: waiting for element to be clickable")
