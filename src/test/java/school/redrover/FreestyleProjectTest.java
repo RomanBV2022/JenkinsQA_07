@@ -204,6 +204,7 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickSaveButton()
                 .goHomePage()
                 .getJobDisplayName();
+
         boolean projectExist = new HomePage(getDriver())
                 .clickJobByName("other" + PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .deleteProject()
@@ -211,6 +212,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertFalse(projectExist);
     }
+
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testRenameProject() {
         final HomePage homePage = new HomePage(getDriver())
@@ -574,14 +576,14 @@ public class FreestyleProjectTest extends BaseTest {
                 .isDisplayed());
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
+    @Test
     public void testFreestyleProjectConfigureGeneralSettingsThisProjectIsParameterizedCheckbox() {
         new HomePage(getDriver())
                 .clickNewItem()
                 .createFreestyleProject(PROJECT_NAME)
                 .clickSaveButton()
                 .goHomePage();
+
         WebElement addParameter = new HomePage(getDriver())
                 .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .clickConfigure()
@@ -630,7 +632,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(buildsList.get(buildsList.size() - 1), "#2");
     }
 
-    @Ignore("Expected condition failed: waiting for element to be clickable")
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testEditDescriptionFreestyleProject() {
 
@@ -647,7 +648,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(editDescription, NEW_DESCRIPTION_TEXT);
     }
 
-    @Ignore("Expected condition failed: waiting for element to be clickable")
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testFreestyleProjectAdvancedSetting() {
         boolean helpMessageDisplay = new HomePage(getDriver())
@@ -660,7 +660,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertTrue(helpMessageDisplay);
     }
 
-    @Ignore("Expected condition failed: waiting for element to be clickable")
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testStatusPageUrlCheck() {
         String editedProjectName = PROJECT_NAME.replace(" ", "%20");
