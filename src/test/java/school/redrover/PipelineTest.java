@@ -13,6 +13,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class PipelineTest extends BaseTest {
     private static final String JOB_NAME = "NewPipeline";
@@ -254,16 +255,15 @@ public class PipelineTest extends BaseTest {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'table-box']")));
     }
 
-    @Test(dependsOnMethods = "testDescriptionDisplays")
+    @Test(dependsOnMethods = {"testCreate", "testDescriptionDisplays"})
     public void testDelete() {
-        getDriver().findElement((By.xpath(JOB_ON_DASHBOARD_XPATH))).click();
-        getWait2().until(ExpectedConditions.elementToBeClickable(By.xpath("//span[contains(text(),'Delete')]"))).click();
+        boolean isPipelineExist = new HomePage(getDriver())
+                .clickJobByName(JOB_NAME, new PipelineDetailsPage(getDriver()))
+                .deleteFromSideMenu()
+                .isProjectExist(JOB_NAME);
 
-        getWait2().until(ExpectedConditions.alertIsPresent()).accept();
+        Assert.assertFalse(isPipelineExist);
 
-        getWait5().until(ExpectedConditions.numberOfElementsToBe(By.xpath("//li[@class='jenkins-breadcrumbs__list-item']"), 1));
-
-        Assert.assertEquals(getDriver().findElement(By.xpath("//h1")).getText(), "Welcome to Jenkins!");
     }
 
     @Test

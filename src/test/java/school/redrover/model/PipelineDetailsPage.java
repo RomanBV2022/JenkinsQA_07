@@ -58,6 +58,9 @@ public class PipelineDetailsPage extends BasePage {
     @FindBy(xpath = "//div[@class='build-icon']/a")
     private WebElement buildIcon;
 
+    @FindBy(xpath = "//span[contains(text(), 'Delete')]/../..")
+    private WebElement deleteSideMenuOption;
+
     public PipelineDetailsPage clickAddDescription() {
         addDescription.click();
 
@@ -137,5 +140,12 @@ public class PipelineDetailsPage extends BasePage {
     public boolean isBuildIconDisplayed() {
 
         return getWait2().until(ExpectedConditions.visibilityOf(buildIcon)).isDisplayed();
+    }
+
+    public HomePage deleteFromSideMenu() {
+        deleteSideMenuOption.click();
+        getDriver().switchTo().alert().accept();
+
+        return new HomePage(getDriver());
     }
 }
