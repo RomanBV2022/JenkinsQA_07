@@ -49,7 +49,7 @@ public class FreestyleProjectDetailsPage extends BasePage {
     @FindBy(xpath = "//button[contains(text(), 'Save')]")
     private WebElement saveButton;
 
-    @FindBy(xpath = "//span[contains(text(), 'Delete Project')]/..")
+    @FindBy(xpath = "//*[@id=\"tasks\"]/div[6]/span/a/span[2]")
     private WebElement deleteProject;
 
     @FindBy(xpath = "//a[contains(@href,'configure')]")

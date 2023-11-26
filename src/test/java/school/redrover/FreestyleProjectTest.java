@@ -194,12 +194,18 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(homePage, PROJECT_NAME);
     }
 
-    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
+    @Test
     public void testDeleteFreestyleProjectSideMenu() {
+        String homePage = new HomePage(getDriver())
+                .clickNewItem()
+                .createFreestyleProject("other" + PROJECT_NAME)
+                .clickSaveButton()
+                .goHomePage()
+                .getJobDisplayName();
         boolean projectExist = new HomePage(getDriver())
-                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickJobByName("other" + PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .deleteProject()
-                .isProjectExist(PROJECT_NAME);
+                .isProjectExist("other" + PROJECT_NAME);
 
         Assert.assertFalse(projectExist);
     }
