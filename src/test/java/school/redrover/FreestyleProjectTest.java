@@ -28,6 +28,8 @@ public class FreestyleProjectTest extends BaseTest {
     private final static By LOCATOR_CREATED_JOB_LINK_MAIN_PAGE = By.xpath("//span[contains(text(),'" + PROJECT_NAME + "')]");
 
     private final static String NEW_DESCRIPTION_TEXT = "New freestyle project description";
+    private final static String NAME = "Ņame";
+    private final static String DESCRIPTION = "Description";
 
     private void goToJenkinsHomePage() {
         getDriver().findElement(By.id("jenkins-name-icon")).click();
@@ -924,36 +926,23 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test
     public void testThisProjectIsParameterizedCheckboxAddBooleanParameter() {
-        final String name = "Ņame";
-        final String description = "Description";
+        TestUtils.createFreestyleProject(this, PROJECT_NAME, true);
 
-        createProject("Freestyle project", PROJECT_NAME, true);
+        FreestyleProjectConfigurePage configurePage = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickConfigure()
+                .clickThisProjectIsParameterizedCheckbox()
+                .clickAddParameterDropdown()
+                .clickBooleanParameterOption()
+                .inputParameterName(NAME)
+                .inputParameterDescription(DESCRIPTION)
+                .clickSaveButton()
+                .goHomePage()
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickConfigure();
 
-        getDriver().findElement(LOCATOR_CREATED_JOB_LINK_MAIN_PAGE).click();
-        getDriver().findElement(By.xpath("//*[@id='tasks']/div[5]")).click();
-
-        getDriver().findElement(By.
-                        xpath("//div[@nameref='rowSetStart28']//span[@class='jenkins-checkbox']"))
-                .click();
-        getDriver().findElement(By.xpath("//button[contains(text(), 'Add Parameter')]")).click();
-
-        getDriver().findElement(By.xpath("//a[contains(text(), 'Boolean Parameter')]")).click();
-        getDriver().findElement(By.xpath("//input[@name = 'parameter.name']"))
-                .sendKeys(name);
-        getDriver().findElement(By.xpath("//textarea[@name = 'parameter.description']"))
-                .sendKeys(description);
-        clickSubmitButton();
-
-        getDriver().findElement(LOCATOR_JOB_CONFIGURE_LINK_SIDE_BAR).click();
-
-        Assert.assertEquals(getDriver()
-                        .findElement(By.xpath("//input[@name = 'parameter.name']"))
-                        .getAttribute("value"),
-                name);
-        Assert.assertEquals(getDriver()
-                        .findElement(By.xpath("//textarea[@name = 'parameter.description']"))
-                        .getAttribute("value"),
-                description);
+        Assert.assertTrue(configurePage.getParameterName().equals(NAME) &&
+                configurePage.getParameterDescription().equals(DESCRIPTION));
     }
 
     @Test
