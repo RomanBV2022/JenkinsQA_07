@@ -43,7 +43,6 @@ public class NodeDetailsPage extends BasePage {
     @FindBy(xpath = "//a[contains(@href, 'label')]")
     private WebElement labelText;
 
-
     public NodeDetailsPage(WebDriver driver) {
         super(driver);
     }
