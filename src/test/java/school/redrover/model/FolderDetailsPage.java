@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.model.base.BasePage;
 
+import java.util.List;
+
 public class FolderDetailsPage extends BasePage {
 
     @FindBy(linkText = "Configure")
@@ -69,6 +71,7 @@ public class FolderDetailsPage extends BasePage {
 
     public NewItemPage clickCreateJob() {
         getDriver().findElement(By.xpath("//a[@class='content-block__link']")).click();
+
         return new NewItemPage(getDriver());
     }
 
@@ -82,5 +85,18 @@ public class FolderDetailsPage extends BasePage {
         configure.click();
 
         return new FolderConfigurationPage(getDriver());
+    }
+
+    public FolderMovePage clickMove() {
+        getDriver().findElement(By.xpath("//a[contains(@href,'move')]")).click();
+
+        return new FolderMovePage(getDriver());
+    }
+
+    public List<String> getJobListInsideFolder() {
+        List<WebElement> jobList = getDriver().findElements(By.xpath("//a[contains(@class, 'jenkins-table__link')]"));
+        List<String> resultList = jobList.stream().map(WebElement::getText).toList();
+
+        return resultList;
     }
 }
