@@ -2,7 +2,9 @@ package school.redrover.model;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.model.base.BasePage;
 
 public class NodeCofigurationPage extends BasePage {
@@ -15,6 +17,15 @@ public class NodeCofigurationPage extends BasePage {
 
     @FindBy(xpath = "//input[contains(@name, 'numExecutors')]")
     private WebElement NumberOfExecutorsField;
+
+    @FindBy(xpath = "//input[@name = '_.labelString']")
+    private WebElement labelsField;
+
+    @FindBy(xpath = "//input[@name = '_.remoteFS']")
+    private WebElement RemoteRootDirectoryField;
+
+    @FindBy(xpath = "//div[@class = 'warning']")
+    private WebElement warning;
 
     public NodeCofigurationPage(WebDriver driver) {
         super(driver);
@@ -44,5 +55,24 @@ public class NodeCofigurationPage extends BasePage {
         saveButton.click();
 
         return new AngryErrorPage(getDriver());
+    }
+
+    public NodeDetailsPage inputLabelName(String name) {
+        labelsField.clear();
+        labelsField.sendKeys(name);
+        saveButton.click();
+
+        return new NodeDetailsPage(getDriver());
+    }
+
+    public NodeDetailsPage inputRemoteRootDirectory(String path) {
+        RemoteRootDirectoryField.sendKeys(path);
+        saveButton.click();
+
+        return new NodeDetailsPage(getDriver());
+    }
+
+    public String getWarningText() {
+        return getWait2().until(ExpectedConditions.visibilityOf(warning)).getText();
     }
 }

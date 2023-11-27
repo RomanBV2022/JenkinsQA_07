@@ -40,6 +40,9 @@ public class NodeDetailsPage extends BasePage {
     @FindBy(xpath = "//span/a[contains(@href, '/configure')]")
     private WebElement configureButton;
 
+    @FindBy(xpath = "//a[contains(@href, 'label')]")
+    private WebElement labelText;
+
 
     public NodeDetailsPage(WebDriver driver) {
         super(driver);
@@ -104,5 +107,9 @@ public class NodeDetailsPage extends BasePage {
 
     public String getDescriptionText() {
         return descriptionText.getText();
+    }
+
+    public String getLabelText() {
+        return labelText.getText();
     }
 }
