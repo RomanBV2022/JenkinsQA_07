@@ -1,5 +1,6 @@
 package school.redrover.model;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PipelineDetailsPage extends BasePage {
-
+    
     public PipelineDetailsPage(WebDriver driver) {
         super(driver);
     }
@@ -60,6 +61,12 @@ public class PipelineDetailsPage extends BasePage {
 
     @FindBy(xpath = "//span[contains(text(), 'Delete')]/../..")
     private WebElement deleteSideMenuOption;
+
+    @FindBy(xpath = "//a[contains(@href, '/build?delay=0sec')]")
+    private WebElement buildNowButton;
+
+    @FindBy(xpath = "//a[contains(@href, '/1/console')]")
+    private WebElement tooltipValue;
 
     public PipelineDetailsPage clickAddDescription() {
         addDescription.click();
@@ -148,4 +155,15 @@ public class PipelineDetailsPage extends BasePage {
 
         return new HomePage(getDriver());
     }
+
+    public PipelineDetailsPage clickBuildNowButton() {
+        buildNowButton.click();
+
+        return this;
+    }
+
+    public String getTooltipAttributeValue() {
+        return tooltipValue.getAttribute("tooltip");
+    }
+
 }

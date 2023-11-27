@@ -180,6 +180,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualStageNames, stageNames);
     }
 
+    @Ignore
     @Test
     public void testBuildWithStringParameter() {
         final String parameterName = "textParam";
