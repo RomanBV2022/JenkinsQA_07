@@ -71,6 +71,9 @@ public class PipelineDetailsPage extends BasePage {
     @FindBy(xpath = "//a[@class='task-link ' and contains(@href, 'replay')]")
     private WebElement replayButtonSideMenu;
 
+    @FindBy(xpath = "//a[contains(@data-url, '/doDelete')]")
+    private WebElement deletePipelineButton;
+
     public PipelineDetailsPage clickAddDescription() {
         addDescription.click();
 
@@ -151,6 +154,7 @@ public class PipelineDetailsPage extends BasePage {
 
         return getWait2().until(ExpectedConditions.visibilityOf(buildIcon)).isDisplayed();
     }
+
     public PipelineDetailsPage clickBuildNowButton() {
         buildNowButton.click();
 
@@ -160,7 +164,6 @@ public class PipelineDetailsPage extends BasePage {
     public String getTooltipAttributeValue() {
         return tooltipValue.getAttribute("tooltip");
     }
-
 
     public PipelineDetailsPage clickLastBuildLink(){
         lastBuildLink.click();
@@ -177,5 +180,12 @@ public class PipelineDetailsPage extends BasePage {
     public String getLastBuildLinkText(){
 
         return lastBuildLink.getText();
+    }
+
+    public FolderDetailsPage deletePipelineJobInsideOfFolder() {
+        deletePipelineButton.click();
+        getDriver().switchTo().alert().accept();
+
+        return new FolderDetailsPage(getDriver());
     }
 }
