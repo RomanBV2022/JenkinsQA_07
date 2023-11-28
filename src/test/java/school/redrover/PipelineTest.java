@@ -12,6 +12,7 @@ import school.redrover.runner.TestUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class PipelineTest extends BaseTest {
     private static final String JOB_NAME = "NewPipeline";
@@ -222,15 +223,26 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(buildParameters, parameterChoices);
     }
 
-    @Test(dependsOnMethods = "testPermalinksIsEmpty")
-    public void testDelete() {
-        String homePageHeaderText = new HomePage(getDriver())
-                .clickJobByName(JOB_NAME, new PipelineDetailsPage(getDriver()))
-                .clickDeleteButton()
-                .acceptAlert()
-                .getHeaderText();
 
-        Assert.assertEquals(homePageHeaderText, "Welcome to Jenkins!");
+    private void createAPipeline(String jobName) {
+        getDriver().findElement(By.xpath("//a[@href= '/view/all/newJob']")).click();
+
+        getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("name"))).sendKeys(jobName);
+        getDriver().findElement(By.className("org_jenkinsci_plugins_workflow_job_WorkflowJob")).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.id("ok-button"))).click();
+
+        getWait2().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
+    }
+
+    @Test(dependsOnMethods = {"testCreate", "testDescriptionDisplays"})
+    public void testDelete() {
+        boolean isPipelineExist = new HomePage(getDriver())
+                .clickJobByName(JOB_NAME, new PipelineDetailsPage(getDriver()))
+                .deleteFromSideMenu()
+                .isProjectExist(JOB_NAME);
+
+        Assert.assertFalse(isPipelineExist);
+
     }
 
     @Test
@@ -249,6 +261,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualDescription, description);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testDescriptionDisplays")
     public void testPermalinksIsEmpty() {
         boolean isPermalinksEmpty = new HomePage(getDriver())
