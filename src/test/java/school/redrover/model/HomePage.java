@@ -51,6 +51,13 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//td[@class='pane pane-grow']")
     private WebElement buildQueueSection;
 
+    @FindBy(xpath = "//span[contains(text(),'My Views')]/parent::a")
+    private WebElement myView;
+
+    @FindBy(xpath = "//table[@id='projectstatus']//td[3]/a")
+    private WebElement itemNameInTable;
+
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
@@ -155,10 +162,7 @@ public class HomePage extends BasePage {
     }
 
     public String getProjectBuildStatusByName(String projectName) {
-        return getDriver()
-                .findElement(By.id("job_" + projectName))
-                .findElement(By.className("svg-icon"))
-                .getAttribute("tooltip");
+        return getDriver().findElement(By.id("job_" + projectName)).findElement(By.className("svg-icon")).getAttribute("tooltip");
     }
 
     public String getHeadLineText() {
@@ -199,8 +203,7 @@ public class HomePage extends BasePage {
     public HomePage hoverOverJobDropdownMenu(String name) {
         WebElement projectName = getDriver().findElement(By.xpath("//span[text()='" + name + "']"));
 
-        new Actions(getDriver())
-                .moveToElement(projectName).click().perform();
+        new Actions(getDriver()).moveToElement(projectName).click().perform();
 
         return this;
     }
@@ -212,18 +215,11 @@ public class HomePage extends BasePage {
     }
 
     public <T> T clickRenameInDropdownMenu(String jobName, T page) {
-        new Actions(getDriver())
-                .moveToElement(getDriver()
-                .findElement(By.xpath("//span[contains(text(),'" + jobName + "')]")))
-                .perform();
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//span[contains(text(),'" + jobName + "')]"))).perform();
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='job/" + jobName.replace(" ", "%20") + "/']/button")));
 
-        new Actions(getDriver())
-                .moveToElement(getDriver()
-                        .findElement(By.xpath("//a[@href='job/" + jobName.replace(" ", "%20") + "/']/button")))
-                .click()
-                .perform();
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[@href='job/" + jobName.replace(" ", "%20") + "/']/button"))).click().perform();
 
         getWait2().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/job/" + jobName.replace(" ", "%20") + "/confirm-rename']"))).click();
 
@@ -253,4 +249,14 @@ public class HomePage extends BasePage {
     public boolean isJobInBuildQueue(String jobName) {
         return getWait10().until(ExpectedConditions.visibilityOf(buildQueueSection)).getText().contains(jobName);
     }
+
+    public MyViewPage clickMyView() {
+        getWait2().until(ExpectedConditions.elementToBeClickable(myView)).click();
+        return new MyViewPage(getDriver());
+    }
+
+    public String getItemNameInTable() {
+        return itemNameInTable.getText();
+    }
+
 }

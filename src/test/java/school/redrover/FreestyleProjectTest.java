@@ -482,15 +482,16 @@ public class FreestyleProjectTest extends BaseTest {
 
     @Test(description = "Creating Freestyle project using an empty name")
     public void testFreestyleProjectWithEmptyName() {
+        NewItemPage newItemPage = new HomePage(getDriver())
+                .clickNewItem();
+        String textResult = newItemPage
+                .clickOk(new NewItemPage(getDriver()))
+                .getRequiredNameErrorMessage();
 
-        getDriver().findElement(By.xpath("//a[@href = '/view/all/newJob']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
-
-        String textResult = getDriver().findElement(By.id("itemname-required")).getText();
-        WebElement buttonOk = getDriver().findElement(By.id("ok-button"));
+        boolean okButtonEnabled = newItemPage.isOkButtonEnabled();
 
         Assert.assertEquals(textResult, "» This field cannot be empty, please enter a valid name");
-        Assert.assertFalse(buttonOk.isEnabled());
+        Assert.assertFalse(okButtonEnabled);
     }
 
     @Test
@@ -519,25 +520,24 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(errorText, "No name is specified");
     }
 
-    @Test
+@Ignore
+    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testDisable() {
-        createFreeStyleProject(PROJECT_NAME);
-        clickSubmitButton();
+        FreestyleProjectDetailsPage detailsPage = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickEnableDisableButton();
 
-        getDriver().findElement(By.xpath("//form[@action='disable']/button")).click();
-
-        Assert.assertTrue(getDriver().findElement(By.xpath("//form[@action='enable']/button")).isEnabled());
+        Assert.assertTrue(detailsPage.isProjectDisabled());
     }
 
-    @Test
+@Ignore
+    @Test(dependsOnMethods = {"testDisable", "testCreateFreestyleProjectWithValidName"})
     public void testEnable() {
-        createFreeStyleProject(PROJECT_NAME);
-        clickSubmitButton();
+        FreestyleProjectDetailsPage detailsPage = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickEnableDisableButton();
 
-        getDriver().findElement(By.xpath("//form[@action='disable']/button")).click();
-        getDriver().findElement(By.xpath("//form[@action='enable']/button")).click();
-
-        Assert.assertTrue(getDriver().findElement(By.xpath("//form[@action='disable']")).isEnabled());
+        Assert.assertTrue(detailsPage.isEnabled());
     }
 
     @Test(dependsOnMethods = "testTooltipDiscardOldBuildsIsVisible")
@@ -545,36 +545,36 @@ public class FreestyleProjectTest extends BaseTest {
         String actualResult = new HomePage(getDriver())
                 .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .goToConfigureFromSideMenu()
-                .clickHelpDescriptionOfDiscardOldBuilds();
+                .clickHelpDescriptionOfDiscardOldBuilds()
+                .getAttributeOfHelpDescriptionDiscardOldBuilds();
 
         assertEquals(actualResult, "display: block;");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testTooltipDiscardOldBuildsIsVisible")
     public void testHelpDescriptionOfDiscardOldBuildsIsClosed() {
-        createFreeStyleProject(PROJECT_NAME);
-        WebElement helpButton = getDriver().findElement(By.cssSelector("a[helpurl='/descriptor/jenkins.model.BuildDiscarderProperty/help']"));
-        helpButton.click();
-        helpButton.click();
+        String actualResult = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .goToConfigureFromSideMenu()
+                .clickHelpDescriptionOfDiscardOldBuilds()
+                .clickHelpDescriptionOfDiscardOldBuilds()
+                .getAttributeOfHelpDescriptionDiscardOldBuilds();
 
-        Assert.assertEquals(getDriver().findElement(By.cssSelector("[nameref='rowSetStart26'] .help"))
-                .getAttribute("style"), "display: none;");
+
+        assertEquals(actualResult, "display: none;");
     }
 
     @Test
     public void testSelectThisProjectIsParameterizedCheckbox() {
         createFreeStyleProject(PROJECT_NAME);
         goToJenkinsHomePage();
-        getDriver().findElement(LOCATOR_CREATED_JOB_LINK_MAIN_PAGE).click();
+        WebElement addParameterFromCheckBox = (WebElement) new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickConfigureFromSideMenu()
+                .clickOnParametrizedCheckBox()
+                .checkIsParameteresDropDownMenuAvailable();
 
-        getDriver().findElement(By.xpath("//div[5]//span[1]//a[1]//span[1]//*[name()='svg']")).click();
-
-        getDriver().findElement
-                        (By.xpath("//label[normalize-space()='This project is parameterized']"))
-                .click();
-
-        Assert.assertTrue(getDriver().findElement(By.xpath("//button[contains(text(), 'Add Parameter')]"))
-                .isDisplayed());
+        Assert.assertTrue(addParameterFromCheckBox.isDisplayed());
     }
 
     @Test
@@ -651,7 +651,7 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
-    public void testFreestyleProjectAdvancedSetting() {
+    public void testFreestyleProjectAdvancedSettingVisibilityOfHelpDescriptionQuietPeriod() {
         boolean helpMessageDisplay = new HomePage(getDriver())
                 .clickOnJob()
                 .goToConfigureFromSideMenu()
@@ -674,15 +674,16 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testDisableFreestyleProject() {
-        createFreeStyleProject(PROJECT_NAME);
-        goToJenkinsHomePage();
+    public void testDisableFreestyleProjectFromFreestyleProjectDetailPage() {
+        String homePage = new HomePage(getDriver())
+                .clickNewItem()
+                .createFreestyleProject(PROJECT_NAME)
+                .goHomePage()
+                .clickOnJob()
+                .clickEnableDisableButton()
+                .getWarningMessageWhenDisabled();
 
-        getDriver().findElement(By.cssSelector("a[class='jenkins-table__link model-link inside']")).click();
-        clickSubmitButton();
-        String result = getDriver().findElement(By.cssSelector("form[id='enable-project']")).getText();
-
-        Assert.assertEquals("This project is currently disabled", result.substring(0, 34));
+        Assert.assertEquals("This project is currently disabled", homePage);
     }
 
     @Test

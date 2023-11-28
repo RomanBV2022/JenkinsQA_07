@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.model.base.BasePage;
 
+import javax.xml.xpath.XPath;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,9 @@ public class FreestyleProjectDetailsPage extends BasePage {
 
     @FindBy(linkText = "Configure")
     private WebElement configureLink;
+
+    @FindBy(xpath = "//div[5]//span[1]//a[1]//span[1]//*[name()='svg']")
+    private WebElement configureBtn;
 
     @FindBy(className = "warning")
     private WebElement warningMessage;
@@ -66,6 +70,9 @@ public class FreestyleProjectDetailsPage extends BasePage {
     private WebElement deleteProjectButton;
 
 
+    @FindBy(className = "warning")
+    private WebElement projectDisabledWarning;
+
     public FreestyleProjectDetailsPage(WebDriver driver) {
         super(driver);
     }
@@ -91,6 +98,11 @@ public class FreestyleProjectDetailsPage extends BasePage {
         return new FreestyleProjectConfigurePage(getDriver());
     }
 
+    public FreestyleProjectConfigurePage clickConfigureFromSideMenu(){
+        configureBtn.click();
+        return new FreestyleProjectConfigurePage(getDriver());
+
+    }
     public boolean isEnabled() {
         return getTextEnableDisableButton().equals("Disable Project");
     }
@@ -201,4 +213,8 @@ public class FreestyleProjectDetailsPage extends BasePage {
         getDriver().switchTo().alert().accept();
         return new HomePage(getDriver());
     }
+    public boolean isProjectDisabled() {
+        return projectDisabledWarning.isEnabled();
+    }
+
 }

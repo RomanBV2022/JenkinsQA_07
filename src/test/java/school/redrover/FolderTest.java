@@ -9,7 +9,6 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.model.*;
 import school.redrover.runner.BaseTest;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -160,7 +159,7 @@ public class FolderTest extends BaseTest {
 
     @Ignore
     @Test
-    public void testOKbuttonIsNotClickableWithoutFolderName() {
+    public void testOKButtonIsNotClickableWithoutFolderName() {
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
         getDriver().findElement(By.xpath("//li[@class='com_cloudbees_hudson_plugins_folder_Folder']")).click();
         WebElement okButton = getDriver().findElement(By.id("ok-button"));
@@ -184,27 +183,19 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(actualTooltipValue, "Success > Console Output");
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testCreatedPipelineWasBuiltSuccessfullyInCreatedFolder")
     public void testDeletePipelineInsideOfFolder() {
-        getDriver().findElement(By.xpath("//a[@href='job/Folder/']")).click();
-        new Actions(getDriver())
-                .moveToElement(getDriver().findElement(By.xpath("//a[@href='/job/Folder/configure']")))
-                .click()
-                .perform();
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+        int sizeOfEmptyJobListInsideOfFolderAfterJobDeletion = new HomePage(getDriver())
+                .clickJobByName(FOLDER_NAME, new FolderDetailsPage(getDriver()))
+                .clickJobByName(JOB_NAME, new PipelineDetailsPage(getDriver()))
+                .deletePipelineJobInsideOfFolder()
+                .getJobListInsideFolder().size();
 
-        getDriver().findElement(By.xpath("//a[@href='job/Pipeline/']")).click();
-        getDriver().findElement(By.xpath("//a[@data-url='/job/Folder/job/Pipeline/doDelete']")).click();
-
-        getDriver().switchTo().alert().accept();
-
-        Assert.assertEquals(getDriver().findElement(By.className("h4")).getText(), "This folder is empty");
+        Assert.assertEquals(sizeOfEmptyJobListInsideOfFolderAfterJobDeletion, 0);
     }
 
-
     @Test(dataProvider = "provideUnsafeCharacters")
-    public void testCreateNameSpecialCharacters(String unsafeChar) {
+    public void testCreateNameSpecialCharactersGetMessage(String unsafeChar) {
         String errorMessage = new HomePage(getDriver())
                 .clickNewItem()
                 .typeItemName(unsafeChar)
@@ -212,6 +203,18 @@ public class FolderTest extends BaseTest {
                 .getInvalidNameErrorMessage();
 
         Assert.assertEquals(errorMessage, "» ‘" + unsafeChar + "’ is an unsafe character");
+    }
+
+    @Test(dataProvider = "provideUnsafeCharacters")
+    public void testCreateNameSpecialCharactersAbsenceOnHomePage(String unsafeChar) {
+        boolean createdNameSpecialCharacters = new HomePage(getDriver())
+                .clickNewItem()
+                .createFolder(unsafeChar)
+                .goHomePage()
+                .getJobList()
+                .contains(unsafeChar);
+
+        Assert.assertFalse(createdNameSpecialCharacters);
     }
 
     @Test
@@ -241,8 +244,6 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(angryErrorPage.getErrorMessage(), "A problem occurred while processing the request.");
     }
 
-
-    @Ignore
     @Test(dependsOnMethods = "testCreate")
     public void testAddDescriptionToFolder() {
         final String descriptionText = "This is Folder's description";
