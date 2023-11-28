@@ -1,7 +1,6 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
@@ -126,7 +125,7 @@ public class NodesTest extends BaseTest {
         String actualName = new HomePage(getDriver())
                 .goNodesListPage()
                 .clickNodeByName(NODE_NAME)
-                .clickConfigure()
+                .clickConfigure(new NodeCofigurationPage(getDriver()))
                 .clearAndInputNewName(newName)
                 .saveButtonClick(new NodeDetailsPage(getDriver()))
                 .getNodeName();
@@ -271,7 +270,7 @@ public class NodesTest extends BaseTest {
         String labelText = new HomePage(getDriver())
                 .goNodesListPage()
                 .clickNodeByName(NEW_NODE_NAME)
-                .clickConfigure()
+                .clickConfigure(new NodeCofigurationPage(getDriver()))
                 .inputLabelName(labelName)
                 .getLabelText();
 
@@ -285,7 +284,7 @@ public class NodesTest extends BaseTest {
         String errorMessage = new HomePage(getDriver())
                 .goNodesListPage()
                 .clickNodeByName(NEW_NODE_NAME)
-                .clickConfigure()
+                .clickConfigure(new NodeCofigurationPage(getDriver()))
                 .inputInvalidNumberOfExecutors(numberOfExecutes)
                 .getErrorMessage();
 
@@ -299,7 +298,7 @@ public class NodesTest extends BaseTest {
         AngryErrorPage angryErrorPage = new HomePage(getDriver())
                 .goNodesListPage()
                 .clickNodeByName(NEW_NODE_NAME)
-                .clickConfigure()
+                .clickConfigure(new NodeCofigurationPage(getDriver()))
                 .inputEnormousNumberOfExecutors(Integer.MAX_VALUE);
 
         Assert.assertEquals(angryErrorPage.getErrorNotification(), "Oops!");
@@ -308,17 +307,16 @@ public class NodesTest extends BaseTest {
 
     @Test(dependsOnMethods = "testCheckWarningMessage")
     public void testSetCorrectNumberOfExecutorsForBuiltInNode() {
-        final int numberOfExecutors = 5;
+        final int numberOfExecutors = 3;
 
-        goToNodesPage();
-        clickConfigureNode("Built-In Node");
-        getDriver().findElement(By.xpath("//input[contains(@name, 'numExecutors')]")).clear();
-        getDriver().findElement(By.xpath("//input[contains(@name, 'numExecutors')]"))
-                .sendKeys(String.valueOf(numberOfExecutors));
-        getDriver().findElement(By.xpath("//button[@name = 'Submit']")).click();
+        int number = new HomePage(getDriver())
+                .goNodesListPage()
+                .clickNodeByName("")
+                .clickConfigure(new BuildInNodeConfigurationPage(getDriver()))
+                .inputNumbersOfExecutors(numberOfExecutors)
+                .getSizeListBuildExecutors();
 
-        List<WebElement> listExecutors = getDriver().findElements(By.xpath("//div[@id = 'executors']//table//tr/td[1]"));
-        Assert.assertEquals(listExecutors.size(), numberOfExecutors);
+        Assert.assertEquals(number, numberOfExecutors);
     }
 
     @Test(dependsOnMethods = "testSetEnormousNumberOfExecutes")
@@ -327,9 +325,9 @@ public class NodesTest extends BaseTest {
         String warning = new HomePage(getDriver())
                 .goNodesListPage()
                 .clickNodeByName(NEW_NODE_NAME)
-                .clickConfigure()
+                .clickConfigure(new NodeCofigurationPage(getDriver()))
                 .inputRemoteRootDirectory("@")
-                .clickConfigure()
+                .clickConfigure(new NodeCofigurationPage(getDriver()))
                 .getWarningText();
 
         Assert.assertEquals(warning,
