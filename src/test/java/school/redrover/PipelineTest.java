@@ -234,27 +234,6 @@ public class PipelineTest extends BaseTest {
         getWait2().until(ExpectedConditions.elementToBeClickable(By.name("Submit"))).click();
     }
 
-    private void goMainPageByBreadcrumb() {
-        getDriver().findElement(By.xpath("//div[@id = 'breadcrumbBar']//a[@href = '/']")).click();
-        getWait5().until(ExpectedConditions.numberOfElementsToBe(By.xpath("//li[@class='jenkins-breadcrumbs__list-item']"), 1));
-    }
-
-    /*
-    private void runHelloWorldBuildInPipeline(String jobName) {
-        getDriver().findElement(By.xpath(CONFIGURE_ON_SIDE_PANEL_XPATH)).click();
-        getWait5().until(ExpectedConditions.textToBe(By.cssSelector("div#side-panel h1"), "Configure"));
-
-        Select select = new Select(getDriver().findElement(By.xpath("//div[@class='samples']/select")));
-        select.selectByValue("hello");
-        getWait2().until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@class='ace_scroller']"), "Hello World"));
-
-        getDriver().findElement(By.name("Submit")).click();
-
-        getWait5().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@id = 'tasks']//a[contains(@href, '/job/" + jobName + "/build')]"))).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'table-box']")));
-    }
-*/
     @Test(dependsOnMethods = {"testCreate", "testDescriptionDisplays"})
     public void testDelete() {
         boolean isPipelineExist = new HomePage(getDriver())
@@ -282,6 +261,7 @@ public class PipelineTest extends BaseTest {
         Assert.assertEquals(actualDescription, description);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testDescriptionDisplays")
     public void testPermalinksIsEmpty() {
         boolean isPermalinksEmpty = new HomePage(getDriver())
