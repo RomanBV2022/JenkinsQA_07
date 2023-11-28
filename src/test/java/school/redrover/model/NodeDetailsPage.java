@@ -67,10 +67,10 @@ public class NodeDetailsPage extends BasePage {
         return message.getText();
     }
 
-    public NodeCofigurationPage clickConfigure() {
+    public <T> T clickConfigure(T page) {
         configure.click();
 
-        return new NodeCofigurationPage(getDriver());
+        return page;
     }
 
     public NodeDetailsPage clickDeleteAgentButton() {
