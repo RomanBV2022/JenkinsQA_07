@@ -520,6 +520,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(errorText, "No name is specified");
     }
 
+
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testDisable() {
         FreestyleProjectDetailsPage detailsPage = new HomePage(getDriver())
@@ -528,6 +529,7 @@ public class FreestyleProjectTest extends BaseTest {
 
         Assert.assertTrue(detailsPage.isProjectDisabled());
     }
+
 
     @Test(dependsOnMethods = {"testDisable", "testCreateFreestyleProjectWithValidName"})
     public void testEnable() {
@@ -649,7 +651,7 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
-    public void testFreestyleProjectAdvancedSetting() {
+    public void testFreestyleProjectAdvancedSettingVisibilityOfHelpDescriptionQuietPeriod() {
         boolean helpMessageDisplay = new HomePage(getDriver())
                 .clickOnJob()
                 .goToConfigureFromSideMenu()
@@ -672,15 +674,16 @@ public class FreestyleProjectTest extends BaseTest {
     }
 
     @Test
-    public void testDisableFreestyleProject() {
-        createFreeStyleProject(PROJECT_NAME);
-        goToJenkinsHomePage();
+    public void testDisableFreestyleProjectFromFreestyleProjectDetailPage() {
+        String homePage = new HomePage(getDriver())
+                .clickNewItem()
+                .createFreestyleProject(PROJECT_NAME)
+                .goHomePage()
+                .clickOnJob()
+                .clickEnableDisableButton()
+                .getWarningMessageWhenDisabled();
 
-        getDriver().findElement(By.cssSelector("a[class='jenkins-table__link model-link inside']")).click();
-        clickSubmitButton();
-        String result = getDriver().findElement(By.cssSelector("form[id='enable-project']")).getText();
-
-        Assert.assertEquals("This project is currently disabled", result.substring(0, 34));
+        Assert.assertEquals("This project is currently disabled", homePage);
     }
 
     @Test
