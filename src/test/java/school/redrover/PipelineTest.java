@@ -238,6 +238,7 @@ public class PipelineTest extends BaseTest {
         getWait5().until(ExpectedConditions.numberOfElementsToBe(By.xpath("//li[@class='jenkins-breadcrumbs__list-item']"), 1));
     }
 
+    /*
     private void runHelloWorldBuildInPipeline(String jobName) {
         getDriver().findElement(By.xpath(CONFIGURE_ON_SIDE_PANEL_XPATH)).click();
         getWait5().until(ExpectedConditions.textToBe(By.cssSelector("div#side-panel h1"), "Configure"));
@@ -252,7 +253,7 @@ public class PipelineTest extends BaseTest {
                 By.xpath("//div[@id = 'tasks']//a[contains(@href, '/job/" + jobName + "/build')]"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'table-box']")));
     }
-
+*/
     @Test(dependsOnMethods = {"testCreate", "testDescriptionDisplays"})
     public void testDelete() {
         boolean isPipelineExist = new HomePage(getDriver())
