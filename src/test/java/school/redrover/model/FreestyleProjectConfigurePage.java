@@ -58,6 +58,10 @@ public class FreestyleProjectConfigurePage extends BasePage {
     @FindBy(xpath = "//label[contains(text(), 'This project is parameterized')]")
     private WebElement getThisProjectIsParameterizedCheckbox;
 
+    @FindBy(xpath = "//label[normalize-space()='This project is parameterized']")
+    private WebElement clickCheckBoxThisProjectIsParametrized;
+    @FindBy(xpath = "//button[contains( text(), 'Add Parameter')]")
+    private WebElement clickAddParameterDropDownBtn;
     @FindBy(xpath = "//label[contains(text(), 'This project is parameterized')]/../input")
     private WebElement getThisProjectIsParameterizedCheckboxInput;
 
@@ -247,6 +251,14 @@ public class FreestyleProjectConfigurePage extends BasePage {
     public WebElement getThisProjectIsParameterizedCheckbox() {
         return getThisProjectIsParameterizedCheckboxInput;
     }
+    public FreestyleProjectConfigurePage clickOnParametrizedCheckBox(){
+        clickCheckBoxThisProjectIsParametrized.click();
+        return this;
+    }
+    public WebElement checkIsParameteresDropDownMenuAvailable(){
+       return clickAddParameterDropDownBtn;
+    }
+
 
     public FreestyleProjectConfigurePage inputDescription(String description) {
         inputProjectDescription.sendKeys(description);
