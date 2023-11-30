@@ -834,7 +834,6 @@ public class FreestyleProjectTest extends BaseTest {
             Assert.assertTrue(timestamp.getText().trim().matches("[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}"));
         }
     }
-
     @Test
     public void testMoveFreestyleProjectToFolder() {
         final String folderName = "FolderWrapper";
@@ -877,27 +876,27 @@ public class FreestyleProjectTest extends BaseTest {
                 configurePage.getParameterDescription().equals(DESCRIPTION));
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testAddBooleanParameterDropdownIsSortedAlphabetically() {
-        createProject("Freestyle project", PROJECT_NAME, true);
 
-        getDriver().findElement(LOCATOR_CREATED_JOB_LINK_MAIN_PAGE).click();
-        getDriver().findElement(By.xpath("//*[@id='tasks']/div[5]")).click();
+        List<String> expectedResult = List.of(
+                "Boolean Parameter",
+                "Choice Parameter",
+                "Credentials Parameter",
+                "File Parameter",
+                "Multi-line String Parameter",
+                "Password Parameter",
+                "Run Parameter",
+                "String Parameter");
 
-        getDriver().findElement(
-                        By.xpath("//div[@nameref='rowSetStart28']//span[@class='jenkins-checkbox']"))
-                .click();
-        getDriver().findElement(By.xpath("//button[contains(text(), 'Add Parameter')]")).click();
+        FreestyleProjectConfigurePage freestyleProjectConfigurePage = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickConfigure()
+                .clickThisProjectIsParameterizedCheckbox()
+                .clickAddParameterDropdown();
 
-        List<WebElement> listDropDownElements = getDriver().findElements(By.xpath("//li[@index]"));
-        List<String> getTextOfDropDownElements = new ArrayList<>();
-        for (WebElement element : listDropDownElements) {
-            getTextOfDropDownElements.add(element.getText());
-        }
-
-        List<String> expectedListResult = getTextOfDropDownElements.stream().sorted().toList();
-
-        Assert.assertEquals(getTextOfDropDownElements, expectedListResult);
+        Assert.assertEquals(freestyleProjectConfigurePage.getAddParameterDropdownText()
+                , expectedResult);
     }
 
     @Test
