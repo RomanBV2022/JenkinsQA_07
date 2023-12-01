@@ -239,7 +239,7 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .typeItemName(NAME_FOR_BOUNDARY_VALUES.repeat(256))
                 .selectItemFolder()
-                .clickOk(new ErrorPage(getDriver()))
+                .clickOkWithError(new ErrorPage(getDriver()))
                 .getErrorMessageFromOopsPage();
 
         Assert.assertEquals(errorMessage, "A problem occurred while processing the request.");
@@ -251,7 +251,7 @@ public class FolderTest extends BaseTest {
                 .clickNewItem()
                 .typeItemName(NAME_FOR_BOUNDARY_VALUES.repeat(256))
                 .selectItemFolder()
-                .clickOk(new ErrorPage(getDriver()))
+                .clickOkWithError(new ErrorPage(getDriver()))
                 .goHomePage()
                 .getJobList()
                 .toString();
