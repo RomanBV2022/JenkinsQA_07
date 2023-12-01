@@ -161,17 +161,16 @@ public class ViewTest extends BaseTest {
 
         String newItemName = "Bob";
 
-        boolean newItemCreated = new HomePage(getDriver())
+        String newItemNameActual = new HomePage(getDriver())
                 .clickMyView()
                 .clickNewItem()
                 .typeItemName(newItemName)
                 .selectItemFolder()
                 .clickOk(new MultibranchPipelineConfigurationPage(getDriver()))
                 .goHomePage()
-                .getItemNameInTable()
-                .equals(newItemName );
+                .getItemNameInTable();
 
-        Assert.assertTrue(newItemCreated);
+        Assert.assertEquals(newItemNameActual, newItemName);
     }
 
     @Test
