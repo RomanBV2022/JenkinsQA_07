@@ -40,6 +40,9 @@ public class FolderConfigurationPage extends BaseConfigurationPage {
     @FindBy(xpath = "//div[@class='help']/div[1]")
     private  WebElement helpBlock;
 
+    @FindBy(xpath = "//input[@name='_.displayNameOrNull']")
+    private WebElement inputDisplayName;
+
     public FolderConfigurationPage(WebDriver driver) {
         super(driver);
     }
@@ -103,5 +106,11 @@ public class FolderConfigurationPage extends BaseConfigurationPage {
     public String getHelpBlockText() {
 
         return helpBlock.getText();
+    }
+
+    public FolderConfigurationPage typeDisplayName(String displayName) {
+        inputDisplayName.sendKeys(displayName);
+
+        return this;
     }
 }

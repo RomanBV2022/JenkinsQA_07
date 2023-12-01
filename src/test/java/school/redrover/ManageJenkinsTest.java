@@ -148,4 +148,28 @@ public class ManageJenkinsTest extends BaseTest {
 
         Assert.assertEquals(statusInformationSectionsQuantity, 4);
     }
+
+    @Test
+    public void testTroubleshootingClick() {
+        ManageJenkinsPage manageJenkinsPage = new HomePage(getDriver())
+                .clickManageJenkins();
+
+        Assert.assertTrue(manageJenkinsPage.isManageOldDataClickable());
+    }
+
+    @Test
+    public void testVisibilitySecuritySections() {
+        ManageJenkinsPage manageJenkinsPage = new HomePage(getDriver())
+                .clickManageJenkins();
+
+        Assert.assertTrue(manageJenkinsPage.areSecuritySectionsVisible());
+    }
+
+    @Test
+    public void testClickabilitySecuritySections() {
+        ManageJenkinsPage manageJenkinsPage = new HomePage(getDriver())
+                .clickManageJenkins();
+
+        Assert.assertTrue(manageJenkinsPage.areSecuritySectionsClickable());
+    }
 }

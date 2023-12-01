@@ -52,6 +52,7 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//table[@id='projectstatus']//td[3]/a")
     private WebElement itemNameInTable;
+
     @FindBy(xpath = "//h1")
     private WebElement header;
 
@@ -171,14 +172,9 @@ public class HomePage extends BasePage {
         return !getDriver().findElements(By.id("job_" + projectName)).isEmpty();
     }
 
-    public String getJobDisplayName() {
-        return jobName.getText();
-    }
-
     public String getTitle() {
         return getDriver().getTitle();
     }
-
 
     public String getProjectBuildStatusByName(String projectName) {
         return getDriver().findElement(By.id("job_" + projectName)).findElement(By.className("svg-icon")).getAttribute("tooltip");
@@ -325,6 +321,5 @@ public class HomePage extends BasePage {
         restApiButton.click();
 
         return new RestAPIPage(getDriver());
-
     }
 }

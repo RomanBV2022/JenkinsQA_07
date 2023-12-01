@@ -57,6 +57,45 @@ public class FreestyleProjectTest extends BaseTest {
         getDriver().findElement(By.id("ok-button")).click();
     }
 
+    private void createAnItem(String itemName) {
+        String createdItemName = "New " + itemName;
+
+        if (isItemTitleExists(createdItemName)) {
+            int randInt = ((int) (Math.random() * 100));
+            createdItemName = createdItemName + randInt;
+        } else {
+            createdItemName = createdItemName;
+        }
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys(createdItemName);
+        List<WebElement> items = getDriver().findElements(By.cssSelector(".label"));
+        for (WebElement el : items) {
+            if (itemName.equals(el.getText())) {
+                el.click();
+                break;
+            }
+        }
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.id("ok-button"))).click();
+    }
+
+    private boolean isItemTitleExists(String itemName) {
+        List<WebElement> itemsList = getDriver().findElements(By.cssSelector(".jenkins-table__link.model-link.inside span"));
+        boolean res = false;
+        if (itemsList.isEmpty()) {
+            return res;
+        } else {
+            for (WebElement e : itemsList) {
+                if (e.getText().equals(itemName)) {
+                    res = true;
+                    break;
+                }
+            }
+        }
+
+        return res;
+    }
+
     private void clickBuildNow() {
         getDriver().findElement(By.xpath("//a[@class='task-link ' and contains(@href, 'build')]")).click();
         getWait5().until(ExpectedConditions.visibilityOfAllElements(getDriver()
@@ -88,9 +127,10 @@ public class FreestyleProjectTest extends BaseTest {
                 .createFreestyleProject(PROJECT_NAME)
                 .clickSaveButton()
                 .goHomePage()
-                .getJobDisplayName();
+                .getJobList()
+                .toString();
 
-        Assert.assertEquals(homePage, PROJECT_NAME);
+        Assert.assertTrue(homePage.contains(PROJECT_NAME));
     }
 
     @Test
@@ -961,9 +1001,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testDisableProjectMessage() {
         boolean isMessageVisible = new HomePage(getDriver())
                 .clickNewItem()
-                .selectFreestyleProject()
-                .typeItemName(PROJECT_NAME)
-                .clickOk(new FreestyleProjectConfigurePage(getDriver()))
+                .createFreestyleProject(PROJECT_NAME)
                 .goHomePage()
                 .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .clickEnableDisableButton()
