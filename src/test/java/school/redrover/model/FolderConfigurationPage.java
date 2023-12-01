@@ -3,9 +3,9 @@ package school.redrover.model;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import school.redrover.model.base.BasePage;
+import school.redrover.model.base.BaseConfigurationPage;
 
-public class FolderConfigurationPage extends BasePage {
+public class FolderConfigurationPage extends BaseConfigurationPage {
 
     @FindBy(name = "_.description")
     private WebElement descriptionTextField;
