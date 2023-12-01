@@ -515,15 +515,14 @@ public class ViewTest extends BaseTest {
 
         createNewFreestyleProject(UUID.randomUUID().toString());
 
-        String nameViewNameActual =
-        new HomePage(getDriver())
-        .clickMyView()
-        .clickAddTabButton()
-        .typeNewViewName(VIEW_NAME)
-        .clickIncludeGlobalViewTypeRadioBTN()
-        .clickCreateButton()
-        .clickOKButton(new MyViewPage(getDriver()))
-        .getMyViewName();
+        String nameViewNameActual = new HomePage(getDriver())
+                .clickMyView()
+                .clickAddTabButton()
+                .typeNewViewName(VIEW_NAME)
+                .clickIncludeGlobalViewTypeRadioBTN()
+                .clickCreateButton()
+                .clickOKButton(new MyViewPage(getDriver()))
+                .getMyViewName();
 
         Assert.assertEquals(nameViewNameActual, VIEW_NAME);
     }
