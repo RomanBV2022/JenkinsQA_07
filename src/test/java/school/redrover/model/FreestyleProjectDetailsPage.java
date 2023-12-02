@@ -5,12 +5,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import school.redrover.model.base.BasePage;
+import school.redrover.model.base.BaseProjectPage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FreestyleProjectDetailsPage extends BasePage {
+public class FreestyleProjectDetailsPage extends BaseProjectPage {
 
     @FindBy(xpath = "//a[contains(@href, '/build?delay=0sec')]")
     private WebElement buildNowButton;
@@ -66,6 +66,9 @@ public class FreestyleProjectDetailsPage extends BasePage {
     @FindBy(className = "warning")
     private WebElement projectDisabledWarning;
 
+    @FindBy(xpath = "//ul[@style='list-style-type: none;']/li/a")
+    private List<WebElement> upstreamProjectsList;
+
     public FreestyleProjectDetailsPage(WebDriver driver) {
         super(driver);
     }
@@ -94,7 +97,7 @@ public class FreestyleProjectDetailsPage extends BasePage {
         return new FreestyleProjectConfigurePage(getDriver());
     }
 
-    public FreestyleProjectConfigurePage clickConfigureFromSideMenu(){
+    public FreestyleProjectConfigurePage clickConfigureFromSideMenu() {
         configureBtn.click();
 
         return new FreestyleProjectConfigurePage(getDriver());
@@ -138,7 +141,9 @@ public class FreestyleProjectDetailsPage extends BasePage {
         return this;
     }
 
-    public boolean isJobExist() { return getDriver().findElement(By.xpath("//div[@id='main-panel']//h1")).isDisplayed(); }
+    public boolean isJobExist() {
+        return getDriver().findElement(By.xpath("//div[@id='main-panel']//h1")).isDisplayed();
+    }
 
     public FreestyleProjectBuildDetailsPage clickPermalinkLastBuild() {
         lastBuild.click();
@@ -146,7 +151,9 @@ public class FreestyleProjectDetailsPage extends BasePage {
         return new FreestyleProjectBuildDetailsPage(getDriver());
     }
 
-    public String getPermalinksText() { return listPermalinks.getText(); }
+    public String getPermalinksText() {
+        return listPermalinks.getText();
+    }
 
     public FreestyleProjectDetailsPage clickAddOrEditDescriptionButton() {
         addOrEditDescriptionButton.click();
@@ -186,5 +193,9 @@ public class FreestyleProjectDetailsPage extends BasePage {
 
     public boolean isProjectDisabled() {
         return projectDisabledWarning.isEnabled();
+    }
+
+    public List<String> getUpstreamProjectsList() {
+        return upstreamProjectsList.stream().map(WebElement::getText).toList();
     }
 }

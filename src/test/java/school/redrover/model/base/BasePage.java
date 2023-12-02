@@ -1,6 +1,7 @@
 package school.redrover.model.base;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import school.redrover.model.HomePage;
 
 public abstract class BasePage extends BaseModel {
+
     @FindBy(tagName = "h1")
     private WebElement heading;
 
@@ -67,5 +69,14 @@ public abstract class BasePage extends BaseModel {
     public WebElement getSearchBox() {
 
         return searchBoxHeader;
+    }
+
+    public <T> T waitAndRefresh(T page) {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("setTimeout(function(){\n" +
+                "    location.reload();\n" +
+                "}, 500);");
+
+        return page;
     }
 }
