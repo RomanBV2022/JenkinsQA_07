@@ -53,9 +53,6 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//table[@id='projectstatus']//td[3]/a")
     private WebElement itemNameInTable;
 
-    @FindBy(xpath = "//h1")
-    private WebElement header;
-
     @FindBy(xpath = "//a[@href = '/manage']")
     private WebElement goManageJenkinsPage;
 
@@ -180,10 +177,6 @@ public class HomePage extends BasePage {
         return getDriver().findElement(By.id("job_" + projectName)).findElement(By.className("svg-icon")).getAttribute("tooltip");
     }
 
-    public String getHeadLineText() {
-        return getDriver().findElement(By.xpath("//div[@class='empty-state-block']/h1")).getText();
-    }
-
     public <T> T clickAnyJobCreated(T page) {
         getDriver().findElement(By.xpath("//a[@class = 'jenkins-table__link model-link inside']")).click();
 
@@ -251,9 +244,6 @@ public class HomePage extends BasePage {
         return itemNameInTable.getText();
     }
 
-    public String getHeaderText() {
-        return header.getText();
-    }
 
     public NodeDetailsPage clickOnNodeName(String nodeName) {
         getDriver().findElement(By.xpath("//span[text()='" + nodeName + "']")).click();
@@ -322,4 +312,5 @@ public class HomePage extends BasePage {
 
         return new RestAPIPage(getDriver());
     }
+
 }
