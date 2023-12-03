@@ -34,6 +34,18 @@ public class FolderDetailsPage extends BaseProjectPage {
     @FindBy(xpath = "//a[contains(@class, 'jenkins-table__link')]")
     private List<WebElement> jobsList;
 
+    @FindBy(className = "textarea-show-preview")
+    private WebElement previewButton;
+
+    @FindBy(className = "textarea-hide-preview")
+    private WebElement previewHideButton;
+
+    @FindBy(xpath = "//div[@class='textarea-preview']")
+    private WebElement descriptionPreview;
+
+    @FindBy(xpath = "//div[@id='description']/div[1]")
+    private WebElement actualFolderDescription;
+
     @FindBy(xpath = "//a[contains(@href, '/confirm-rename')]")
     private WebElement renameButton;
 
@@ -49,6 +61,7 @@ public class FolderDetailsPage extends BaseProjectPage {
 
     public FolderConfigurationPage clickConfigureFolder() {
         configure.click();
+
         return new FolderConfigurationPage(getDriver());
     }
 
@@ -72,7 +85,8 @@ public class FolderDetailsPage extends BaseProjectPage {
     }
 
     public String getActualFolderDescription() {
-        return getDriver().findElement(By.xpath("//div[@id='description']/div[1]")).getText();
+
+        return actualFolderDescription.getText();
     }
 
     public NewItemPage clickCreateJob() {
@@ -116,10 +130,31 @@ public class FolderDetailsPage extends BaseProjectPage {
     }
 
     public String getDescriptionButtonText() {
+
         return getDriver().findElement(By.xpath("//div[@id='description']/div[2]")).getText();
     }
 
     public boolean isJobInJobsList(String jobName) {
+
         return getJobListInsideFolder().contains(jobName);
     }
+
+    public FolderDetailsPage clickPreview() {
+        previewButton.click();
+
+        return this;
+    }
+
+    public String getDescriptionPreview() {
+
+        return descriptionPreview.getText();
+    }
+
+    public FolderDetailsPage clickHidePreview() {
+        previewHideButton.click();
+
+        return this;
+    }
 }
+
+
