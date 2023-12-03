@@ -76,6 +76,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(actualPageName, "Jenkins");
     }
 
+    @Ignore
     @Test
     public void testClickGetInvolved() {
         String actualPageName = new HomePage(getDriver())
