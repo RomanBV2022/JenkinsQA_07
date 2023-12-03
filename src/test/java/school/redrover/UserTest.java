@@ -98,8 +98,8 @@ public class UserTest extends BaseTest {
 
         String fullName = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .fillUserInformationField(USER_NAME, PASSWORD, EMAIL)
                 .getFullNameByName(USER_NAME);
 
@@ -111,14 +111,14 @@ public class UserTest extends BaseTest {
 
         String error = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)
                 .inputFullName(FULL_NAME)
                 .clickCreateUser()
-                .getErrorMassage();
+                .getErrorMessage();
 
         Assert.assertEquals(error, "Invalid e-mail address");
     }
@@ -128,12 +128,12 @@ public class UserTest extends BaseTest {
 
         String error = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputFullName(FULL_NAME)
                 .clickCreateUser()
-                .getErrorMassage();
+                .getErrorMessage();
 
         Assert.assertEquals(error, "Password is required");
     }
@@ -143,14 +143,14 @@ public class UserTest extends BaseTest {
 
         String error = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(WRONG_CONFIRM_PASSWORD)
                 .inputFullName(FULL_NAME)
                 .clickCreateUser()
-                .getErrorMassage();
+                .getErrorMessage();
 
         Assert.assertEquals(error, "Password didn't match");
     }
@@ -371,8 +371,8 @@ public class UserTest extends BaseTest {
 
         List<WebElement> listOfValidationMessages = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .clickCreateUser()
                 .getErrorList();
 
@@ -439,7 +439,7 @@ public class UserTest extends BaseTest {
     public void testDeleteLoggedInUser() {
         UserDatabasePage userDatabasePage = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage();
+                .clickUsersButton();
         Assert.assertFalse(userDatabasePage.deleteLoggedUser());
     }
 
@@ -451,8 +451,8 @@ public class UserTest extends BaseTest {
 
         new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser();
+                .clickUsersButton()
+                .clickCreateUserButton();
 
         CreateNewUserPage createNewUserPage = new CreateNewUserPage(getDriver());
 
@@ -661,8 +661,8 @@ public class UserTest extends BaseTest {
 
         boolean isUserCreated = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)

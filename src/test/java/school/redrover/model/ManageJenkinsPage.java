@@ -76,7 +76,7 @@ public class ManageJenkinsPage extends BasePage {
         return new PluginsPage(getDriver());
     }
 
-    public UserDatabasePage goUserDatabasePage() {
+    public UserDatabasePage clickUsersButton() {
         userSection.click();
 
         return new UserDatabasePage(getDriver());

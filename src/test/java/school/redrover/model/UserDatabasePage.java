@@ -40,7 +40,7 @@ public class UserDatabasePage extends BasePage {
         return doDelete;
     }
 
-    public CreateNewUserPage createUser() {
+    public CreateNewUserPage clickCreateUserButton() {
         createUser.click();
 
         return new CreateNewUserPage(getDriver());

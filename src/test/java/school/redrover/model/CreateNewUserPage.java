@@ -29,7 +29,10 @@ public class CreateNewUserPage extends BasePage {
     private WebElement submitButton;
 
     @FindBy(xpath = "//div[@class = 'error jenkins-!-margin-bottom-2']")
-    private WebElement errorMassage;
+    private WebElement errorMessage;
+
+    @FindBy(xpath = "//div[@class = 'error jenkins-!-margin-bottom-2']")
+    private List<WebElement> errorMessageList;
 
     public CreateNewUserPage(WebDriver driver) {
 
@@ -105,16 +108,14 @@ public class CreateNewUserPage extends BasePage {
         submitButton.click();
         return this;
     }
-    public String getErrorMassage() {
-        return errorMassage.getText();
+    public String getErrorMessage() {
+        return errorMessage.getText();
     }
 
 
     public List<WebElement> getErrorList() {
-        List<WebElement> List = getDriver().findElements(By.xpath(
-                "//div[@class = 'error jenkins-!-margin-bottom-2']"));
 
-        return List;
+        return errorMessageList;
     }
 }
 
