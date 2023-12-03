@@ -2,12 +2,8 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -17,13 +13,13 @@ import school.redrover.model.MultibranchPipelineDetailsPage;
 import school.redrover.runner.BaseTest;
 import school.redrover.runner.TestUtils;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultibranchPipelineTest extends BaseTest {
 
     private static final String MULTIBRANCH_PIPELINE_NAME = "MultibranchPipeline";
+
     private static final String MULTIBRANCH_PIPELINE_NEW_NAME = "MultibranchPipelineNewName";
 
     private static final String MULTIBRANCH_PIPELINE_NON_EXISTING_NAME = "MultibranchPipelineNonExistingName";
@@ -38,28 +34,6 @@ public class MultibranchPipelineTest extends BaseTest {
             textOfWebElements.add(element.getText());
         }
         return textOfWebElements;
-    }
-
-     private void createMultibranchPipelineWithCreateAJob() {
-
-        getDriver().findElement(By.linkText("Create a job")).click();
-        getDriver().findElement(By.id("name")).sendKeys(MULTIBRANCH_PIPELINE_NAME);
-        getDriver().findElement(By.xpath("//span[@class='label' and text()='Multibranch Pipeline']"))
-                .click();
-        getDriver().findElement(By.id("ok-button")).click();
-    }
-
-    private void returnToJenkinsHomePage() {
-        getDriver().findElement(By.xpath("//a[@id = 'jenkins-home-link']")).click();
-    }
-
-    private void createMultibranchPipeline(String name) {
-        returnToJenkinsHomePage();
-
-        getDriver().findElement(By.xpath("//div[@id='tasks']//a[@href='/view/all/newJob']")).click();
-        getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys(name);
-        getDriver().findElement(By.xpath("//span[text()='Multibranch Pipeline']")).click();
-        getDriver().findElement(By.id("ok-button")).click();
     }
 
     @Test
@@ -248,7 +222,9 @@ public class MultibranchPipelineTest extends BaseTest {
 
     @Test
     public void testMultibranchNameDisplayBreadcrumbTrail() {
-        createMultibranchPipelineWithCreateAJob();
+
+        TestUtils.createMultibranchPipeline(this, MULTIBRANCH_PIPELINE_NAME, false);
+
         String pipelineNameExpected = getDriver().findElement(By.xpath("//a[contains(text(),'"
                 + MULTIBRANCH_PIPELINE_NAME + "')]")).getText();
         Assert.assertEquals(pipelineNameExpected, MULTIBRANCH_PIPELINE_NAME);
@@ -416,46 +392,25 @@ public class MultibranchPipelineTest extends BaseTest {
         Assert.assertTrue(namesOfTasks.contains("Move"), "Move is not the additional task of sidebar menu on the left");
     }
 
-    @Test
-    public void testDisableMultibranchPipelineWithHomePage() {
-        String name = "Test_Folder";
-        String expectedResult = "Enable";
+    @Test(dependsOnMethods = "testRenameUsingSidebar")
+    public void testDisable() {
 
-        createMultibranchPipeline(name);
-        returnToJenkinsHomePage();
+        String disabledText = new HomePage(getDriver())
+                .clickJobByName(MULTIBRANCH_PIPELINE_NEW_NAME, new MultibranchPipelineDetailsPage(getDriver()))
+                .clickDisable()
+                .getDisableStatusMessage();
 
-        getDriver().findElement(By.xpath("//tr[@id='job_Test_Folder']//a[@href='job/" + name + "/']")).click();
-        getDriver().findElement(By.xpath("//form[@id='disable-project']/button")).click();
-
-        WebElement enableButton = getDriver().findElement(By.xpath("//form[@id='enable-project']/button"));
-        String actualResult = enableButton.getText();
-
-        Assert.assertEquals(actualResult, expectedResult);
+        Assert.assertTrue(disabledText.contains("This Multibranch Pipeline is currently disabled"));
     }
 
-    @Test
-    public void testDisableMultibranchPipeline() {
-        createMultibranchPipeline("Test_Folder");
-        String expectedResult = "Disabled";
+    @Test(dependsOnMethods = "testDisable")
+    public void testEnable() {
 
-        getDriver().findElement(By.xpath("//span[@id='toggle-switch-enable-disable-project']/label")).click();
+        String disabledText = new HomePage(getDriver())
+                .clickJobByName(MULTIBRANCH_PIPELINE_NEW_NAME, new MultibranchPipelineDetailsPage(getDriver()))
+                .clickEnable()
+                .getDisableButtonText();
 
-        Wait<WebDriver> wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
-
-        WebElement elementPage = wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath(
-                "//span[@id='toggle-switch-enable-disable-project']/label/span[text()='Disabled']"))));
-        String nameToggle = elementPage.getText();
-
-        Assert.assertEquals(nameToggle, expectedResult);
-    }
-
-    @Test(dependsOnMethods = "testDisableMultibranchPipelineWithHomePage")
-    public void testEnableFromStatusPage() {
-        getDriver().findElement(By.xpath("//*[@id=\"job_Test_Folder\"]/td[3]/a")).click();
-
-        getDriver().findElement(By.xpath("//form[@id='enable-project']/button")).click();
-
-        Assert.assertEquals(getDriver().findElement(By.name(
-                "Submit")).getText(), "Disable Multibranch Pipeline");
+        Assert.assertEquals(disabledText, "Disable Multibranch Pipeline");
     }
 }
