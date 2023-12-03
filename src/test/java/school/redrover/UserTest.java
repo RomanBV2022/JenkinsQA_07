@@ -380,24 +380,23 @@ public class UserTest extends BaseTest {
     }
 
     @Test
-    public void testUnableToCreateUserWithExistedUsername() {
-        final String existedUsername = "admin";
-        final String password = "1";
-        final String email = "test@test.com";
-        final String validationMessage = "User name is already taken";
+    public void testCreateUserWithExistedUsername() {
 
-        getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
-        getDriver().findElement(By.xpath("//a[@href = 'securityRealm/']")).click();
-        getDriver().findElement(By.xpath("//a[@href = 'addUser']")).click();
-        getDriver().findElement(By.xpath("//input[@name = 'username']")).sendKeys(existedUsername);
-        getDriver().findElement(By.xpath("//input[@name = 'password1']")).sendKeys(password);
-        getDriver().findElement(By.xpath("//input[@name = 'password2']")).sendKeys(password);
-        getDriver().findElement(By.xpath("//input[@name = 'email']")).sendKeys(email);
-        getDriver().findElement(By.xpath("//button[@name = 'Submit']")).click();
+        String existedName = new HomePage(getDriver())
+                .clickManageJenkins()
+                .goUserDatabasePage()
+                .getUserID(0);
 
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div[@class = 'error jenkins-!-margin-bottom-2']")).getText(),
-                validationMessage);
+        String warningMessage = new UserDatabasePage(getDriver())
+                .createUser()
+                .inputUserName(existedName)
+                .inputPassword(PASSWORD)
+                .inputPasswordConfirm(PASSWORD)
+                .inputEmail(EMAIL)
+                .clickCreateUser()
+                .getErrorMessage();
+
+        Assert.assertEquals(warningMessage, "User name is already taken");
     }
 
     @Test
@@ -730,5 +729,18 @@ public class UserTest extends BaseTest {
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//*[@id='main-panel']/h1")).getText(),
                 fullName);
+    }
+
+    @Test
+    public void testCreateUserWithoutEmail() {
+        CreateNewUserPage userNotCreated= new HomePage(getDriver())
+                .clickManageJenkins()
+                .goUserDatabasePage()
+                .createUser()
+                .inputUserName(USER_NAME)
+                .inputPassword(PASSWORD)
+                .inputPasswordConfirm(PASSWORD)
+                .clickCreateUser();
+        Assert.assertEquals(userNotCreated.getErrorMessage(), "Invalid e-mail address");
     }
 }
