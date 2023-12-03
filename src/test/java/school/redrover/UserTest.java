@@ -384,11 +384,11 @@ public class UserTest extends BaseTest {
 
         String existedName = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
+                .clickUsersButton()
                 .getUserID(0);
 
         String warningMessage = new UserDatabasePage(getDriver())
-                .createUser()
+                .clickCreateUserButton()
                 .inputUserName(existedName)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)
@@ -735,8 +735,8 @@ public class UserTest extends BaseTest {
     public void testCreateUserWithoutEmail() {
         CreateNewUserPage userNotCreated= new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)
