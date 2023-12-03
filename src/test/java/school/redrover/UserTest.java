@@ -98,8 +98,8 @@ public class UserTest extends BaseTest {
 
         String fullName = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .fillUserInformationField(USER_NAME, PASSWORD, EMAIL)
                 .getFullNameByName(USER_NAME);
 
@@ -111,8 +111,8 @@ public class UserTest extends BaseTest {
 
         String error = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)
@@ -128,8 +128,8 @@ public class UserTest extends BaseTest {
 
         String error = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputFullName(FULL_NAME)
                 .clickCreateUser()
@@ -143,8 +143,8 @@ public class UserTest extends BaseTest {
 
         String error = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(WRONG_CONFIRM_PASSWORD)
@@ -368,12 +368,13 @@ public class UserTest extends BaseTest {
 
     @Test
     public void testShowingValidationMessages() {
-        getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
-        getDriver().findElement(By.xpath("//a[@href = 'securityRealm/']")).click();
-        getDriver().findElement(By.xpath("//a[@href = 'addUser']")).click();
-        getDriver().findElement(By.xpath("//button[@name = 'Submit']")).click();
-        List<WebElement> listOfValidationMessages = getDriver().findElements(By.xpath(
-                "//div[@class = 'error jenkins-!-margin-bottom-2']"));
+
+        List<WebElement> listOfValidationMessages = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickUsersButton()
+                .clickCreateUserButton()
+                .clickCreateUser()
+                .getErrorList();
 
         Assert.assertFalse(listOfValidationMessages.isEmpty());
     }
@@ -383,11 +384,11 @@ public class UserTest extends BaseTest {
 
         String existedName = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
+                .clickUsersButton()
                 .getUserID(0);
 
         String warningMessage = new UserDatabasePage(getDriver())
-                .createUser()
+                .clickCreateUserButton()
                 .inputUserName(existedName)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)
@@ -437,7 +438,7 @@ public class UserTest extends BaseTest {
     public void testDeleteLoggedInUser() {
         UserDatabasePage userDatabasePage = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage();
+                .clickUsersButton();
         Assert.assertFalse(userDatabasePage.deleteLoggedUser());
     }
 
@@ -449,8 +450,8 @@ public class UserTest extends BaseTest {
 
         new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser();
+                .clickUsersButton()
+                .clickCreateUserButton();
 
         CreateNewUserPage createNewUserPage = new CreateNewUserPage(getDriver());
 
@@ -659,8 +660,8 @@ public class UserTest extends BaseTest {
 
         boolean isUserCreated = new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)
@@ -734,8 +735,8 @@ public class UserTest extends BaseTest {
     public void testCreateUserWithoutEmail() {
         CreateNewUserPage userNotCreated= new HomePage(getDriver())
                 .clickManageJenkins()
-                .goUserDatabasePage()
-                .createUser()
+                .clickUsersButton()
+                .clickCreateUserButton()
                 .inputUserName(USER_NAME)
                 .inputPassword(PASSWORD)
                 .inputPasswordConfirm(PASSWORD)
