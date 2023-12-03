@@ -368,12 +368,13 @@ public class UserTest extends BaseTest {
 
     @Test
     public void testShowingValidationMessages() {
-        getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
-        getDriver().findElement(By.xpath("//a[@href = 'securityRealm/']")).click();
-        getDriver().findElement(By.xpath("//a[@href = 'addUser']")).click();
-        getDriver().findElement(By.xpath("//button[@name = 'Submit']")).click();
-        List<WebElement> listOfValidationMessages = getDriver().findElements(By.xpath(
-                "//div[@class = 'error jenkins-!-margin-bottom-2']"));
+
+        List<WebElement> listOfValidationMessages = new HomePage(getDriver())
+                .clickManageJenkins()
+                .goUserDatabasePage()
+                .createUser()
+                .clickCreateUser()
+                .getErrorList();
 
         Assert.assertFalse(listOfValidationMessages.isEmpty());
     }

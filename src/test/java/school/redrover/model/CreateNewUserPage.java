@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.model.base.BasePage;
 
+import java.util.List;
+
 public class CreateNewUserPage extends BasePage {
 
     @FindBy(name = "username")
@@ -105,6 +107,14 @@ public class CreateNewUserPage extends BasePage {
     }
     public String getErrorMassage() {
         return errorMassage.getText();
+    }
+
+
+    public List<WebElement> getErrorList() {
+        List<WebElement> List = getDriver().findElements(By.xpath(
+                "//div[@class = 'error jenkins-!-margin-bottom-2']"));
+
+        return List;
     }
 }
 
