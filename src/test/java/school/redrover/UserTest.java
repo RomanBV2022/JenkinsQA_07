@@ -733,7 +733,7 @@ public class UserTest extends BaseTest {
 
     @Test
     public void testCreateUserWithoutEmail() {
-        CreateNewUserPage userNotCreated= new HomePage(getDriver())
+        CreateNewUserPage userNotCreated = new HomePage(getDriver())
                 .clickManageJenkins()
                 .clickUsersButton()
                 .clickCreateUserButton()
