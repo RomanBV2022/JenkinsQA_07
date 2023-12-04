@@ -73,14 +73,16 @@ public class UserTest extends BaseTest {
 
 
     private void goToUsersPage() {
-        getDriver().findElement(By.linkText("Manage Jenkins")).click();
-        getDriver().findElement(By.xpath("//dt[contains(text(),'Users')]")).click();
+        UserDatabasePage page = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickUsersButton();
     }
 
     private void goToUserCreateFormPage() {
-        getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
-        getDriver().findElement(By.xpath("//dt[text() = 'Users']")).click();
-        getDriver().findElement(By.xpath("//*[@href='addUser']")).click();
+        CreateNewUserPage page = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickUsersButton()
+                .clickCreateUserButton();
     }
 
 
@@ -150,7 +152,7 @@ public class UserTest extends BaseTest {
     public void testCreateUserAndLogIn() {
         String userIconText = new HomePage(getDriver())
                 .clickLogOut()
-                .inputNewCredentialsAndLogIn(USER_NAME, PASSWORD)
+                .logIn(USER_NAME, PASSWORD)
                 .getCurrentUserName();
 
         assertEquals(userIconText, USER_NAME);
@@ -158,28 +160,21 @@ public class UserTest extends BaseTest {
 
     @Test
     public void testDeleteUserAndLogIn() {
-        final String password = "te5t";
-        final String email = "test_redrov@yahoo.com";
+        UserDatabasePage pageWithDeletedUser = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickUsersButton()
+                .clickCreateUserButton()
+                .fillUserInformationField(USER_NAME, PASSWORD, EMAIL)
+                .clickDeleteIcon(1);
 
-        createUser(USER_NAME, password, email);
-        getDriver().findElement(By.id("jenkins-name-icon")).click();
-
-        getDriver().findElement(By.xpath("//a[@href='/asynchPeople/']")).click();
-
-        getDriver().findElement(By.xpath(String.format("//a[@href='/user/%s/']", USER_NAME.toLowerCase()))).click();
-
-        getDriver().findElement(By.xpath("//span[contains(text(),'Delete')]")).click();
         Alert alert = getDriver().switchTo().alert();
         alert.accept();
 
-        getDriver().findElement(By.xpath("//span[contains(text(),'log out')]")).click();
-
-        getDriver().findElement(By.name("j_username")).sendKeys(USER_NAME);
-        getDriver().findElement(By.name("j_password")).sendKeys(password);
-        getDriver().findElement(By.name("Submit")).click();
-
-        String errorText = getDriver().findElement(By.className("app-sign-in-register__error")).getText();
-        assertEquals(errorText, "Invalid username or password");
+        String currentErrorMessage = new HomePage(getDriver())
+                .clickLogOut()
+                .logInWithError(USER_NAME, PASSWORD)
+                .getErrorMessage();
+        Assert.assertEquals(currentErrorMessage, "Invalid username or password");
     }
 
     @Test(dependsOnMethods = {"testCreateUserWithValidData"})

@@ -22,6 +22,15 @@ public class UserDatabasePage extends BasePage {
     @FindBy(xpath = "//a[contains(@class, 'link inside')]")
     private List<WebElement> userIDs;
 
+    @FindBy(xpath = "//tr/td[5]")
+    private List<WebElement> deleteIcon;
+
+
+    public UserDatabasePage clickDeleteIcon (int n) {
+        deleteIcon.get(n).click();
+        return this;
+    }
+
 
     public UserDatabasePage(WebDriver driver) {
         super(driver);
