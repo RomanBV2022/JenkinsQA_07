@@ -743,4 +743,19 @@ public class UserTest extends BaseTest {
                 .clickCreateUser();
         Assert.assertEquals(userNotCreated.getErrorMessage(), "Invalid e-mail address");
     }
+    @Test
+    public void testNewUserDisplayedOnPeopleScreen() {
+        String userId = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickUsersButton()
+                .clickCreateUserButton()
+                .inputUserName(USER_NAME)
+                .inputPassword(PASSWORD)
+                .inputPasswordConfirm(PASSWORD)
+                .inputEmail(EMAIL)
+                .clickSubmit()
+                .getUserID(1);
+        Assert.assertEquals(userId, USER_NAME);
+    }
+
 }
