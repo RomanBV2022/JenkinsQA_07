@@ -236,4 +236,41 @@ public class ManageJenkinsTest extends BaseTest {
 
         Assert.assertTrue(redirectedUrl.contains(url));
     }
+    @Test
+    public void testLoadStatisticsRedirection() {
+        String currentUrl = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickLoadStatisticsSection()
+                .getCurrentUrl();
+
+        Assert.assertTrue(currentUrl.contains("load-statistics"));
+    }
+
+    @Test
+    public void testAboutJenkinsRedirection() {
+        String pageTitle = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickAboutJenkinsSection()
+                .getPageTitle();
+
+        Assert.assertTrue(pageTitle.contains("About Jenkins"));
+    }
+
+    @Test
+    public void testStatusInformationSectionsTitles() {
+        List<String> expectedStatusInformationSectionsList = List.of(
+                "System Information",
+                "System Log",
+                "Load Statistics",
+                "About Jenkins"
+        );
+
+        List<String> statusInformationSectionsList = new HomePage(getDriver())
+                .clickManageJenkins()
+                .getStatusInformationSectionsTitles();
+
+        Assert.assertEquals(statusInformationSectionsList, expectedStatusInformationSectionsList,
+                "Status Information sections titles differ from the expected ones");
+    }
+
 }
