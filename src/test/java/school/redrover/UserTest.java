@@ -238,18 +238,16 @@ public class UserTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateUser")
-    public void testConfigureUser() {
+    public void testAddUserDescriptionFromPeople() {
+        String description = new HomePage(getDriver())
+                .clickPeople()
+                .clickOnTheCreatedUser(NAME)
+                .clickAddDescription()
+                .addAUserDescription(DESCRIPTION)
+                .clickSaveButton()
+                .getDescriptionText();
 
-        getDriver().findElement(By.xpath("//a[@href = '/asynchPeople/']")).click();
-        getDriver().findElement(By.xpath("//a[@href = '/user/ivan/']")).click();
-
-        getDriver().findElement(By.xpath("//a[@id = 'description-link']")).click();
-        getDriver().findElement(By.name("description")).sendKeys("qweqwe");
-        getDriver().findElement(By.name("Submit")).click();
-
-        Assert.assertEquals(
-                getDriver().findElement(By.xpath("//div[@id = 'description']/div[1]")).getText(), "qweqwe");
-
+        Assert.assertEquals(description, DESCRIPTION);
     }
 
     @Test
@@ -311,7 +309,7 @@ public class UserTest extends BaseTest {
                         By.xpath("//div[@id = 'description']/div[1]"))).getText(), DESCRIPTION);
     }
 
-    @Test(dependsOnMethods = "testConfigureUser")
+    @Test(dependsOnMethods = "testAddUserDescriptionFromPeople")
     public void testDeleteUser() {
 
         getDriver().findElement(By.xpath("//a[@href = '/manage']")).click();
