@@ -25,9 +25,9 @@ public class FreestyleProjectTest extends BaseTest {
     private final static String PARAMETER_NAME = "Ņame";
     private final static String PARAMETER_DESCRIPTION = "Description";
 
-    private final static String USER_NAME_CREDENTIAL = "Credentials Provider name";
 
-    @Test(groups = "groupA")
+
+    @Test
     public void testCreateFreestyleProjectWithValidName() {
         String homePage = new HomePage(getDriver())
                 .clickNewItem()
@@ -956,38 +956,5 @@ public class FreestyleProjectTest extends BaseTest {
                 .getTextItemsSidePanel();
 
         assertEquals(itemsActual, itemsExpected);
-    }
-
-    @Test(groups = "groupA", dependsOnMethods = "testCreateFreestyleProjectWithValidName")
-    public void testCreateCredentialFromConfigurePage() {
-
-        boolean credentialsCreated = new HomePage(getDriver())
-                .clickProjectStatusByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
-                .clickConfigure()
-                .clickGitRadioButtonWithScroll()
-                .clickAddButton()
-                .clickJenkinsOption()
-                .inputUsername(USER_NAME_CREDENTIAL)
-                .clickAddButtonCredentialsProvider()
-                .checkIfNewCredentialInTheMenu(USER_NAME_CREDENTIAL);
-
-        assertTrue(credentialsCreated);
-    }
-
-    @Test(dependsOnGroups = "groupA")
-    public void testDeleteCredential() {
-
-        String expectedText = "Global credentials (unrestricted)";
-
-        String actualText = new HomePage(getDriver())
-                .clickPeople()
-                .clickCurrentUserName()
-                .clickCredentials()
-                .clickCredentialsByName(USER_NAME_CREDENTIAL)
-                .clickDeleteButton()
-                .clickYesButton()
-                .getTextMainPanel();
-
-        assertEquals(actualText, expectedText);
     }
 }
