@@ -30,7 +30,6 @@ public class CredentialsPage extends BasePage {
     }
 
     public CredentialsPage clickCredentialsByName(String credentialName) {
-
         getDriver().findElement(By.xpath("//a[contains(text(), '" + credentialName + "')]")).click();
         return this;
     }

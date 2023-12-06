@@ -962,7 +962,7 @@ public class FreestyleProjectTest extends BaseTest {
     public void testCreateCredentialFromConfigurePage() {
 
         boolean credentialsCreated = new HomePage(getDriver())
-                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickProjectStatusByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .clickConfigure()
                 .clickGitRadioButtonWithScroll()
                 .clickAddButton()
@@ -989,7 +989,6 @@ public class FreestyleProjectTest extends BaseTest {
                 .getTextMainPanel();
 
         assertEquals(actualText, expectedText);
-
     }
 }
 

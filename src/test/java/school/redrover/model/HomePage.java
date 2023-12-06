@@ -75,6 +75,11 @@ public class HomePage extends BasePage {
         return page;
     }
 
+    public <T extends BaseProjectPage> T clickProjectStatusByName(String name, T page) {
+        getDriver().findElement(By.xpath("//span[contains(text(),'" + name + "')]/parent::a")).click();
+        return page;
+    }
+
     public ManageJenkinsPage clickManageJenkins() {
         goManageJenkinsPage.click();
 
