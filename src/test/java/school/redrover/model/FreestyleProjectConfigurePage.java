@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FreestyleProjectConfigurePage extends BaseConfigurationPage {
+public class FreestyleProjectConfigurePage extends BaseConfigurationPage<FreestyleProjectDetailsPage> {
 
     @FindBy(xpath = "//select[@checkdependson='url']")
     private WebElement credentialsOption;
@@ -173,6 +173,11 @@ public class FreestyleProjectConfigurePage extends BaseConfigurationPage {
         super(driver);
     }
 
+    @Override
+    protected FreestyleProjectDetailsPage createProjectPage() {
+        return new FreestyleProjectDetailsPage(getDriver());
+    }
+
     public boolean tooltipDiscardOldBuildsIsVisible() {
         boolean tooltipIsVisible = true;
 
@@ -184,12 +189,6 @@ public class FreestyleProjectConfigurePage extends BaseConfigurationPage {
         }
 
         return tooltipIsVisible;
-    }
-
-    public FreestyleProjectDetailsPage clickSaveButton() {
-        saveButton.click();
-
-        return new FreestyleProjectDetailsPage(getDriver());
     }
 
     public FreestyleProjectConfigurePage scrollPage(int x, int y) {
