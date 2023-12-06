@@ -591,16 +591,6 @@ public class FreestyleProjectConfigurePage extends BaseConfigurationPage {
                 .map(x -> x.getText().replaceAll("[^a-zA-Z0-9]", " "))
                 .anyMatch(y -> y.contains(username));
 
-//        for (WebElement option : options) {
-//            String op = option.getText();
-//            System.out.println(op);
-//
-//            if(str_Sample.contains("ing"))) {
-//
-//
-//            }
-//        }
-
         return match;
     }
 }
