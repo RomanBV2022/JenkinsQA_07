@@ -954,4 +954,22 @@ public class FreestyleProjectTest extends BaseTest {
 
         assertEquals(itemsActual, itemsExpected);
     }
+
+    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
+    public void testCreateCredentialFromConfigurePage() {
+
+        String username = "Credentials Provider name";
+
+        boolean credentialsCreated = new HomePage(getDriver())
+                .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
+                .clickConfigure()
+                .clickGitRadioButtonWithScroll()
+                .clickAddButton()
+                .clickJenkinsOption()
+                .inputUsername(username)
+                .clickAddButtonCredentialsProvider()
+                .checkIfNewCredentialInTheMenu(username);
+
+        assertTrue(credentialsCreated);
+    }
 }
