@@ -991,4 +991,3 @@ public class FreestyleProjectTest extends BaseTest {
         assertEquals(actualText, expectedText);
     }
 }
-
