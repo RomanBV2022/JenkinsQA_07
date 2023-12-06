@@ -157,7 +157,7 @@ public class FreestyleProjectConfigurePage extends BaseConfigurationPage {
     @FindBy(name = "parameter.choices")
     private WebElement parameterChoicesTextArea;
 
-    @FindBy(xpath = "//button[@id = 'yui-gen3-button']")
+    @FindBy(xpath = "//div[@class='credentials-select-control']//span[@class='first-child']/button")
     private WebElement addButton;
 
     @FindBy(xpath = "//span[@title= 'Jenkins Credentials Provider']")
