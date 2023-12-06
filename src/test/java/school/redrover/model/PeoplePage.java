@@ -28,6 +28,9 @@ import school.redrover.model.base.BasePage;
     @FindBy(css = "a[href='api/']")
     private WebElement restApiButton;
 
+    @FindBy(xpath = "//a[contains(@href,'/user/')]")
+    private WebElement currentUserName;
+
     public PeoplePage clickLargeIcon() {
         largeButton.click();
         return this;
@@ -63,4 +66,10 @@ import school.redrover.model.base.BasePage;
 
         return new RestApiPage(getDriver());
     }
+
+    public UserPage clickCurrentUserName() {
+        currentUserName.click();
+        return new UserPage(getDriver());
+    }
+
 }

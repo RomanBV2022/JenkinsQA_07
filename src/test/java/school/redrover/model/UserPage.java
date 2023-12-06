@@ -21,6 +21,9 @@ public class UserPage extends BasePage {
     @FindBy(name = "Submit")
     private WebElement submitNewUser;
 
+    @FindBy(xpath = "//a[contains(@href,'/credentials')]")
+    private WebElement credentials;
+
     public UserPage(WebDriver driver) { super(driver); }
 
     public UserPage goToUserCreateFormPage() {
@@ -68,5 +71,10 @@ public class UserPage extends BasePage {
         List<WebElement> userNameList = getDriver().findElements(By.xpath("//tr/td/a"));
 
         return userNameList.stream().map(WebElement::getText).toList();
+    }
+
+    public CredentialsPage clickCredentials() {
+        credentials.click();
+        return new CredentialsPage(getDriver());
     }
 }

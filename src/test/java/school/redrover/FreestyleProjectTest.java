@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Ignore;
@@ -25,7 +26,9 @@ public class FreestyleProjectTest extends BaseTest {
     private final static String PARAMETER_NAME = "Ņame";
     private final static String PARAMETER_DESCRIPTION = "Description";
 
-    @Test
+    private final static String USER_NAME_CREDENTIAL = "Credentials Provider name";
+
+    @Test(groups = "groupA")
     public void testCreateFreestyleProjectWithValidName() {
         String homePage = new HomePage(getDriver())
                 .clickNewItem()
@@ -955,10 +958,8 @@ public class FreestyleProjectTest extends BaseTest {
         assertEquals(itemsActual, itemsExpected);
     }
 
-    @Test(dependsOnMethods = "testCreateFreestyleProjectWithValidName")
+    @Test(groups = "groupA", dependsOnMethods = "testCreateFreestyleProjectWithValidName")
     public void testCreateCredentialFromConfigurePage() {
-
-        String username = "Credentials Provider name";
 
         boolean credentialsCreated = new HomePage(getDriver())
                 .clickJobByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
@@ -966,10 +967,29 @@ public class FreestyleProjectTest extends BaseTest {
                 .clickGitRadioButtonWithScroll()
                 .clickAddButton()
                 .clickJenkinsOption()
-                .inputUsername(username)
+                .inputUsername(USER_NAME_CREDENTIAL)
                 .clickAddButtonCredentialsProvider()
-                .checkIfNewCredentialInTheMenu(username);
+                .checkIfNewCredentialInTheMenu(USER_NAME_CREDENTIAL);
 
         assertTrue(credentialsCreated);
     }
+
+    @Test(dependsOnGroups = "groupA")
+    public void testDeleteCredential() {
+
+        String expectedText = "Global credentials (unrestricted)";
+
+        String actualText = new HomePage(getDriver())
+                .clickPeople()
+                .clickCurrentUserName()
+                .clickCredentials()
+                .clickCredentialsByName(USER_NAME_CREDENTIAL)
+                .clickDeleteButton()
+                .clickYesButton()
+                .getTextMainPanel();
+
+        assertEquals(actualText, expectedText);
+
+    }
 }
+
