@@ -584,13 +584,10 @@ public class FreestyleProjectConfigurePage extends BaseConfigurationPage {
     public boolean checkIfNewCredentialInTheMenu(String username) {
 
         Select s = new Select(credentialsOption);
-//        List <WebElement> options = s.getOptions();
 
-        boolean match =  s.getOptions()
+        return s.getOptions()
                 .stream()
                 .map(x -> x.getText().replaceAll("[^a-zA-Z0-9]", " "))
                 .anyMatch(y -> y.contains(username));
-
-        return match;
     }
 }
