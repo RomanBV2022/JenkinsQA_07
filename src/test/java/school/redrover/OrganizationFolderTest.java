@@ -188,9 +188,9 @@ public class OrganizationFolderTest extends BaseTest {
 
         HomePage cloneFolder = new HomePage(getDriver())
                 .clickJobByName(PROJECT_NAME,new OrganizationFolderDetailsPage(getDriver()))
-                .clickConfigureSideMenu()
+                .clickConfigure()
                 .clickPeriodicallyCheckbox()
-                .clickSave()
+                .clickSaveButton()
                 .goHomePage()
                 .clickNewItem()
                 .typeItemName(CLONE_NAME)
@@ -220,7 +220,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .typeItemName(PROJECT_NAME)
                 .selectOrganizationFolder()
                 .clickOk(new OrganizationFolderConfigurationPage(getDriver()))
-                .clickSave()
+                .clickSaveButton()
                 .clickDelete()
                 .getJobList();
 
@@ -235,7 +235,7 @@ public class OrganizationFolderTest extends BaseTest {
                 .typeItemName(PROJECT_NAME)
                 .selectOrganizationFolder()
                 .clickOk(new OrganizationFolderConfigurationPage(getDriver()))
-                .clickSave()
+                .clickSaveButton()
                 .clickDelete().getPageTitle();
 
         Assert.assertEquals(pageTitle, "Dashboard [Jenkins]");
