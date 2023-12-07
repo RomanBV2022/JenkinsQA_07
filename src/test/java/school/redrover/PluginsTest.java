@@ -48,10 +48,21 @@ public class PluginsTest extends BaseTest {
         boolean updateButtonIsEnabled = new HomePage(getDriver())
                 .clickManageJenkins()
                 .goPluginsPage()
-                .selectedFirstCheckbox()
+                .selectFirstCheckbox()
                 .updateButtonIsEnabled();
 
         Assert.assertTrue(updateButtonIsEnabled);
+    }
+
+    @Test
+    public void testAllUpdatesPluginsAreSelectedFromTitle() {
+        boolean areAllCheckboxesSelected = new HomePage(getDriver())
+                .clickManageJenkins()
+                .goPluginsPage()
+                .selectAllCheckboxesFromTitle()
+                .areAllCheckboxesSelected();
+
+        Assert.assertTrue(areAllCheckboxesSelected);
     }
 
 }
