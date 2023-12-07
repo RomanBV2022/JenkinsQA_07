@@ -28,6 +28,9 @@ import school.redrover.model.base.BasePage;
     @FindBy(css = "a[href='api/']")
     private WebElement restApiButton;
 
+    @FindBy(xpath = "//a[contains(@href,'/user/')]")
+    private WebElement currentUserName;
+
     @FindBy(xpath = "//a[@class='jenkins-table__link']")
     private WebElement userID;
 
@@ -67,8 +70,14 @@ import school.redrover.model.base.BasePage;
         return new RestApiPage(getDriver());
     }
 
+    public UserPage clickCurrentUserName() {
+        currentUserName.click();
+        return new UserPage(getDriver());
+    }
+
     public UserPage clickOnUserId() {
         userID.click();
+
         return new UserPage(getDriver());
     }
 }

@@ -25,6 +25,8 @@ public class FreestyleProjectTest extends BaseTest {
     private final static String PARAMETER_NAME = "Ņame";
     private final static String PARAMETER_DESCRIPTION = "Description";
 
+
+
     @Test
     public void testCreateFreestyleProjectWithValidName() {
         String homePage = new HomePage(getDriver())
