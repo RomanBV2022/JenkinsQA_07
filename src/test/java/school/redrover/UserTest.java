@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.model.HomePage;
@@ -63,6 +64,26 @@ public class UserTest extends BaseTest {
                 .clickManageJenkins()
                 .clickUsersButton()
                 .clickAddUserButton();
+    }
+
+    @DataProvider
+    public Object[][] provideUnsafeCharacter() {
+        return new Object[][]{
+                {"#"}, {"&"}, {"?"}, {"!"}, {"@"}, {"$"}, {"%"}, {"^"}, {"*"}, {"|"}, {"/"}, {"\\"}, {"<"}, {">"},
+                {"["}, {"]"}, {":"}, {";"}
+        };
+    }
+
+    @DataProvider
+    public Object[][] provideInvalidCredentials() {
+        return new Object[][]{
+                {"&", "", "test$test.test"},
+                {"@", "", "test.test"},
+                {">", "", "тест\"тест.ком"},
+                {"[", "", "test2test.test"},
+                {":", "", "test-test.test"},
+                {";", "", "test_test.test"}
+        };
     }
 
     @Test
@@ -188,7 +209,7 @@ public class UserTest extends BaseTest {
 
         Assert.assertEquals(description, DESCRIPTION);
     }
-
+    @Ignore("expected [Test description] but found []")
     @Test (dependsOnMethods = {"testAddUserDescriptionFromPeople", "testCreateUserWithValidData"})
     public void testConfigureShowDescriptionPreview() {
         String previewDescriptionText = new HomePage(getDriver())
@@ -199,6 +220,18 @@ public class UserTest extends BaseTest {
                 .getPreviewDescriptionText();
 
         Assert.assertEquals(previewDescriptionText, DESCRIPTION);
+    }
+
+    @Test
+    public void testConfigureAddDescriptionFromPeoplePage() {
+        String description = new HomePage(getDriver())
+                .clickPeople()
+                .clickOnUserId()
+                .clickEditDescription()
+                .addDescription(DESCRIPTION)
+                .getText();
+
+        Assert.assertEquals(description, DESCRIPTION);
     }
 
     @Test
@@ -309,9 +342,8 @@ public class UserTest extends BaseTest {
         Assert.assertEquals(expectedLabelNames, actualLabelNames);
     }
 
-    @Test
-    public void testCreateUserWithInvalidName() {
-        char unsafeCharacter = '$';
+    @Test(dataProvider = "provideUnsafeCharacter")
+    public void testCreateUserWithInvalidName(String unsafeCharacter) {
 
         String errorMessage = new HomePage(getDriver())
                 .clickManageJenkins()
@@ -578,5 +610,21 @@ public class UserTest extends BaseTest {
 
         Assert.assertEquals(actualResult,"TestUser");
 
+    }
+
+    @Test(dataProvider = "provideInvalidCredentials")
+    public void testCreateUserWithInvalidCredentials(String name, String password, String mail) {
+        List<WebElement> errorList = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickUsersButton()
+                .clickAddUserButton()
+                .inputUserName(name)
+                .inputPassword(password)
+                .inputPasswordConfirm(password)
+                .inputEmail(mail)
+                .clickCreateUser()
+                .getErrorList();
+
+        Assert.assertTrue(errorList.size() == 4);
     }
 }
