@@ -281,6 +281,7 @@ public class ManageJenkinsTest extends BaseTest {
     public void testCreateCredentialFromConfigurePage() {
 
         TestUtils.createFreestyleProject(this, PROJECT_NAME, true);
+
         boolean credentialsCreated = new HomePage(getDriver())
                 .clickProjectStatusByName(PROJECT_NAME, new FreestyleProjectDetailsPage(getDriver()))
                 .clickConfigure()
@@ -298,6 +299,7 @@ public class ManageJenkinsTest extends BaseTest {
     public void testDeleteCredential() {
 
         String expectedText = "Global credentials (unrestricted)";
+
         String actualText = new HomePage(getDriver())
                 .clickPeople()
                 .clickCurrentUserName()
