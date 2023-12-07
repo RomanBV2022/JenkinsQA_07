@@ -14,13 +14,10 @@ import static org.testng.Assert.assertTrue;
 public class ManageJenkinsTest extends BaseTest {
 
     private static final String TOOLTIP = "Press / on your keyboard to focus";
-
     private static final String PLACEHOLDER = "Search settings";
-
     private static final String SEARCH_SYSTEM = "System";
     private final static String USER_NAME_CREDENTIAL = "Credentials Provider name";
     private static final String PROJECT_NAME = "NewFreestyleProject";
-
 
     @Test
     public void testShortcutTooltipVisibility() {
