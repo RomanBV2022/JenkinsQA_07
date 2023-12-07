@@ -222,6 +222,7 @@ public class UserTest extends BaseTest {
         Assert.assertEquals(previewDescriptionText, DESCRIPTION);
     }
 
+
     @Test
     public void testConfigureAddDescriptionFromPeoplePage() {
         String description = new HomePage(getDriver())

@@ -89,8 +89,9 @@ public class UserPage extends BasePage {
 
     public CredentialsPage clickCredentials() {
         credentials.click();
-      
+
         return new CredentialsPage(getDriver());
+    }
 
     public UserPage clickEditDescription() {
         editDescriptionButton.click();

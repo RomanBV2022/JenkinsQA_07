@@ -72,6 +72,8 @@ import school.redrover.model.base.BasePage;
 
     public UserPage clickCurrentUserName() {
         currentUserName.click();
+        return new UserPage(getDriver());
+    }
 
     public UserPage clickOnUserId() {
         userID.click();
