@@ -537,12 +537,15 @@ public class UserTest extends BaseTest {
 
     @Test
     public void testVerifyDisplayedUserAfterCreateUser() {
-        String password = "1234567";
-        String email = "test@gmail.com";
-        createUserNoFullName(USER_NAME, password, email);
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//table[@id='people']/tbody")).
-                getText().contains(USER_NAME), true);
+        Boolean userName = new HomePage(getDriver())
+                .clickManageJenkins()
+                .clickUsersButton()
+                .clickAddUserButton()
+                .fillUserInformationField(USER_NAME, PASSWORD, EMAIL)
+                .isUserCreated(USER_NAME);
+
+        Assert.assertTrue(userName);
     }
 
     @Test
