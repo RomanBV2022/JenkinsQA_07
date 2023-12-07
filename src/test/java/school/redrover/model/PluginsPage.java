@@ -1,6 +1,5 @@
 package school.redrover.model;
 
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,6 +22,9 @@ public class PluginsPage extends BasePage<PluginsPage> {
 
     @FindBy(id = "button-update")
     private WebElement updateButton;
+
+    @FindBy(xpath = "//table[@id='plugins']//tr[1]//label")
+    private WebElement firstCheckbox;
 
     public PluginsPage(WebDriver driver) {
         super(driver);
@@ -52,8 +54,15 @@ public class PluginsPage extends BasePage<PluginsPage> {
         return false;
     }
 
-    public boolean isUpdateButtonClickable() {
+    public boolean updateButtonIsEnabled() {
 
         return updateButton.isEnabled();
     }
+
+    public PluginsPage selectedFirstCheckbox() {
+        firstCheckbox.click();
+
+        return this;
+    }
+
 }
