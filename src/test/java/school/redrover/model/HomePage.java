@@ -221,4 +221,14 @@ public class HomePage extends BasePage {
     public String getCurrentUserName() {
         return currentUserName.getText();
     }
+
+    public FolderDetailsPage clickFolderName(String folderName ){
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='"+ folderName +"']"))).click();
+        return new FolderDetailsPage(getDriver());
+
+    }
+
+
+
+
 }

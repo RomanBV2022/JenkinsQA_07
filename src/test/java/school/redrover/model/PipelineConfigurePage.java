@@ -177,4 +177,9 @@ public class PipelineConfigurePage extends BaseConfigurationPage<PipelineDetails
                 .map(element -> element.getAttribute("title"))
                 .toList();
     }
+
+    public PipelineDetailsPage clickSave() {
+        getWait5().until(ExpectedConditions.elementToBeClickable(saveButton)).click();
+        return new PipelineDetailsPage(getDriver());
+    }
 }
