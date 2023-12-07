@@ -24,6 +24,19 @@ public class UserPage extends BasePage {
     @FindBy(xpath = "//a[contains(@href,'/credentials')]")
     private WebElement credentials;
 
+    @FindBy(id = "description-link")
+    private WebElement editDescriptionButton;
+
+    @FindBy(name = "description")
+    private WebElement userDescriptionInput;
+
+    @FindBy(name = "Submit")
+    private WebElement saveButton;
+
+    @FindBy(xpath = "//div[@id='description']/div[1]")
+    private WebElement descriptionText;
+
+
     public UserPage(WebDriver driver) { super(driver); }
 
     public UserPage goToUserCreateFormPage() {
@@ -73,8 +86,27 @@ public class UserPage extends BasePage {
         return userNameList.stream().map(WebElement::getText).toList();
     }
 
+
     public CredentialsPage clickCredentials() {
         credentials.click();
+      
         return new CredentialsPage(getDriver());
+
+    public UserPage clickEditDescription() {
+        editDescriptionButton.click();
+
+        return this;
+    }
+
+    public UserPage addDescription(String description) {
+        userDescriptionInput.clear();
+        userDescriptionInput.sendKeys(description);
+        saveButton.click();
+
+        return this;
+    }
+
+    public String getText() {
+        return descriptionText.getText();
     }
 }

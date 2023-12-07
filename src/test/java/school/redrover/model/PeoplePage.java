@@ -31,6 +31,9 @@ import school.redrover.model.base.BasePage;
     @FindBy(xpath = "//a[contains(@href,'/user/')]")
     private WebElement currentUserName;
 
+    @FindBy(xpath = "//a[@class='jenkins-table__link']")
+    private WebElement userID;
+
     public PeoplePage clickLargeIcon() {
         largeButton.click();
         return this;
@@ -69,6 +72,10 @@ import school.redrover.model.base.BasePage;
 
     public UserPage clickCurrentUserName() {
         currentUserName.click();
+
+    public UserPage clickOnUserId() {
+        userID.click();
+
         return new UserPage(getDriver());
     }
 }
