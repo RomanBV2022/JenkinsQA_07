@@ -76,16 +76,6 @@ public class PipelineDetailsPage extends BaseProjectPage<PipelineConfigurePage, 
         super(driver);
     }
 
-
-
-
-
-    public PipelineDetailsPage clickAddDescription() {
-        addDescription.click();
-
-        return this;
-    }
-
     public PipelineDetailsPage inputDescription(String description) {
         descriptionField.sendKeys(description);
 
@@ -97,11 +87,6 @@ public class PipelineDetailsPage extends BaseProjectPage<PipelineConfigurePage, 
         getWait2().until(ExpectedConditions.visibilityOf(description));
 
         return this;
-    }
-
-    public String getDescription() {
-
-        return description.getText();
     }
 
     public List<String> getPermalinksList() {
@@ -117,12 +102,6 @@ public class PipelineDetailsPage extends BaseProjectPage<PipelineConfigurePage, 
         buildNowSideMenuOption.click();
 
         return this;
-    }
-
-    public BuildWithParametersPage clickBuildWithParameters() {
-        buildNowSideMenuOption.click();
-
-        return new BuildWithParametersPage(getDriver());
     }
 
     @Override

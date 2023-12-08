@@ -201,10 +201,10 @@ public class PipelineTest extends BaseTest {
 
         String actualDescription = new HomePage(getDriver())
                 .clickJobByName(JOB_NAME, new PipelineDetailsPage(getDriver()))
-                .clickAddDescription()
+                .clickAddOrEditDescription()
                 .inputDescription(description)
                 .clickSaveButton()
-                .getDescription();
+                .getDescriptionText();
 
         Assert.assertEquals(actualDescription, description);
     }
