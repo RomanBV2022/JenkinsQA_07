@@ -276,7 +276,6 @@ public class ManageJenkinsTest extends BaseTest {
                 "Status Information sections titles differ from the expected ones");
     }
 
-    @Ignore
     @Test
     public void testCreateCredentialFromConfigurePage() {
 
@@ -295,7 +294,6 @@ public class ManageJenkinsTest extends BaseTest {
         assertTrue(credentialsCreated);
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testCreateCredentialFromConfigurePage")
     public void testDeleteCredential() {
 
