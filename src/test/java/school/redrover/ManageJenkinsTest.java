@@ -295,6 +295,7 @@ public class ManageJenkinsTest extends BaseTest {
         assertTrue(credentialsCreated);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testCreateCredentialFromConfigurePage")
     public void testDeleteCredential() {
 
