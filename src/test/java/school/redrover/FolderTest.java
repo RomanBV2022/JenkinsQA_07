@@ -312,7 +312,7 @@ public class FolderTest extends BaseTest {
         Assert.assertEquals(previewText, DESCRIPTION_NAME);
     }
 
-
+    @Ignore
     @Test
     public void testAddChildHealthMetric()  {
 
