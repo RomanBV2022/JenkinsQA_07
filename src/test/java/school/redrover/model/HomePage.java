@@ -53,9 +53,6 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//a[@href = '/manage']")
     private WebElement goManageJenkinsPage;
 
-    @FindBy(css = "a[href='api/']")
-    private WebElement restApiButton;
-
     @FindBy(className = "addTab")
     private WebElement newViewButton;
 
@@ -203,12 +200,6 @@ public class HomePage extends BasePage<HomePage> {
 
     public boolean isScheduleABuildButtonNotDisplayed(String jobName) {
         return getDriver().findElements(By.xpath("//*[@id='job_" + jobName.replace(" ", "%20") + "']//*[@class='jenkins-table__cell--tight']//a")).isEmpty();
-    }
-
-    public RestApiPage goRestApi() {
-        restApiButton.click();
-
-        return new RestApiPage(getDriver());
     }
 
     public NewViewPage clickNewViewButton() {
