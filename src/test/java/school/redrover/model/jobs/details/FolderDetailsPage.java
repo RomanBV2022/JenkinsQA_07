@@ -24,15 +24,6 @@ public class FolderDetailsPage extends BaseDetailsPage<FolderConfigurationPage, 
     @FindBy(xpath = "//a[contains(@class, 'jenkins-table__link')]")
     private List<WebElement> jobsList;
 
-    @FindBy(className = "textarea-show-preview")
-    private WebElement previewButton;
-
-    @FindBy(className = "textarea-hide-preview")
-    private WebElement previewHideButton;
-
-    @FindBy(xpath = "//div[@class='textarea-preview']")
-    private WebElement descriptionPreview;
-
     @FindBy(xpath = "//a[contains(@class, 'jenkins-table__link')]")
     private WebElement newProject;
 
@@ -43,13 +34,6 @@ public class FolderDetailsPage extends BaseDetailsPage<FolderConfigurationPage, 
     @Override
     protected FolderConfigurationPage createConfigurationPage() {
         return new FolderConfigurationPage(getDriver());
-    }
-
-    public FolderDetailsPage typeDescription(String description) {
-        descriptionTextArea.clear();
-        descriptionTextArea.sendKeys(description);
-
-        return this;
     }
 
     public NewItemPage clickCreateJob() {
@@ -74,32 +58,9 @@ public class FolderDetailsPage extends BaseDetailsPage<FolderConfigurationPage, 
         return page;
     }
 
-    public FolderDetailsPage clearDescriptionTextArea() {
-        descriptionTextArea.clear();
-
-        return this;
-    }
-
     public boolean isJobInJobsList(String jobName) {
 
         return getJobListInsideFolder().contains(jobName);
-    }
-
-    public FolderDetailsPage clickPreview() {
-        previewButton.click();
-
-        return this;
-    }
-
-    public String getDescriptionPreview() {
-
-        return descriptionPreview.getText();
-    }
-
-    public FolderDetailsPage clickHidePreview() {
-        previewHideButton.click();
-
-        return this;
     }
 
     public NewItemPage clickCreateAJob(){
