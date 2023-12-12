@@ -52,8 +52,11 @@ public abstract class BaseDetailsPage<ProjectConfigurationPage extends BaseConfi
     @FindBy(xpath = "//li[@class='jenkins-breadcrumbs__list-item']")
     private List<WebElement> breadcrumbChain;
 
-    @FindBy(xpath = "//div[@id = 'description']/div[1]")
+    @FindBy(xpath = "//div[@id='description']/div[1]")
     private WebElement descriptionText;
+
+    @FindBy(xpath = "//button[contains(text(), 'Save')]")
+    private WebElement saveButton;
 
     @FindBy(xpath = "//button[@class='jenkins-button jenkins-button--primary ']")
     private WebElement saveDescriptionButton;
@@ -226,6 +229,12 @@ public abstract class BaseDetailsPage<ProjectConfigurationPage extends BaseConfi
 
     public Self clickHideDescriptionPreview() {
         hidePreviewButton.click();
+
+        return (Self)this;
+    }
+
+    public Self clickSaveButton() {
+        saveButton.click();
 
         return (Self)this;
     }

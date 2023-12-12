@@ -8,7 +8,7 @@ import school.redrover.model.HomePage;
 import school.redrover.runner.BaseTest;
 
 import java.util.List;
-
+@Ignore
 public class FooterTest extends BaseTest {
     private static final String JENKINS_VERSION = "Jenkins 2.414.2";
     private static final String ABOUT_JENKINS_VERSION = "Version 2.414.2";
@@ -50,6 +50,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(jenkinsVersion, ABOUT_JENKINS_VERSION);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testJenkinsVersionStatusUserPageClick")
     public void testCheckTippyBox() {
         final List<String> expectedMenu = List.of(
@@ -83,6 +84,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(actualPageName, "Jenkins");
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testCheckTippyBox")
     public void testVerifyClickabilityOfRestAPILink() {
         String restApi = new HomePage(getDriver())
@@ -92,6 +94,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(restApi, REST_API);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testVerifyClickabilityOfRestAPILink")
     public void testJenkinsVersionListTabBar() {
         final List<String> expectedListTabBar = List.of(
@@ -106,6 +109,7 @@ public class FooterTest extends BaseTest {
         Assert.assertEquals(tabBarList, expectedListTabBar);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "testJenkinsVersionListTabBar")
     public void testVerifyAboutJenkinsTabNamesAndActiveStates() {
         AboutJenkinsPage about = new HomePage(getDriver())

@@ -9,6 +9,9 @@ public abstract class BaseConfigurationPage<ProjectPage extends BaseDetailsPage<
     @FindBy(xpath = "//button[@name='Submit']")
     private WebElement saveButton;
 
+    @FindBy(name = "_.description")
+    private WebElement descriptionInputFiled;
+
     public BaseConfigurationPage(WebDriver driver) {
         super(driver);
     }
@@ -19,5 +22,11 @@ public abstract class BaseConfigurationPage<ProjectPage extends BaseDetailsPage<
         saveButton.click();
 
         return createProjectPage();
+    }
+
+    public Self enterDescription(String description) {
+        descriptionInputFiled.sendKeys(description);
+
+        return (Self)this;
     }
 }

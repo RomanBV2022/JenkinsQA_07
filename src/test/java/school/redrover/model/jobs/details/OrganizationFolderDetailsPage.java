@@ -15,6 +15,9 @@ public class OrganizationFolderDetailsPage extends BaseDetailsPage<OrganizationF
     @FindBy(linkText = "Delete Organization Folder")
     private WebElement buttonDelete;
 
+    @FindBy(id = "view-message")
+    private WebElement descriptionText;
+
     public OrganizationFolderDetailsPage(WebDriver driver) {
         super(driver);
     }
@@ -29,5 +32,9 @@ public class OrganizationFolderDetailsPage extends BaseDetailsPage<OrganizationF
         submitButton.click();
 
         return new HomePage(getDriver());
+    }
+
+    public String getDescriptionTextOrganizationFolder() {
+        return descriptionText.getText();
     }
 }

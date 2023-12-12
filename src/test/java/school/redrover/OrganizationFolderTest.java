@@ -233,7 +233,6 @@ public class OrganizationFolderTest extends BaseTest {
         Assert.assertFalse(jobList.contains(PROJECT_NAME));
     }
 
-
     @Test
     public void testRedirectAfterDeleting() {
         String pageTitle = new HomePage(getDriver())
@@ -245,5 +244,17 @@ public class OrganizationFolderTest extends BaseTest {
                 .clickDelete().getPageTitle();
 
         Assert.assertEquals(pageTitle, "Dashboard [Jenkins]");
+    }
+
+    @Test
+    public void testAddProjectDescriptionWhenCreatingProject() {
+        String descriptionText = new HomePage(getDriver())
+                .clickNewItem()
+                .createOrganizationFolder(PROJECT_NAME)
+                .enterDescription("Project description")
+                .clickSaveButton()
+                .getDescriptionTextOrganizationFolder();
+
+        Assert.assertEquals(descriptionText, "Project description");
     }
 }
