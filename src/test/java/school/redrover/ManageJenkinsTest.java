@@ -367,4 +367,21 @@ public class ManageJenkinsTest extends BaseTest {
         Assert.assertTrue(manageJenkinsPage.isAlertNotPresent());
         Assert.assertEquals(manageJenkinsPage.getHeadLineText(), "Manage Jenkins");
     }
+
+    @Test
+    public void testStatusInformationSectionsDescriptions() {
+        List<String> expectedStatusInformationSectionsDescriptions = List.of(
+                "Displays various environmental information to assist trouble-shooting.",
+                "System log captures output from java.util.logging output related to Jenkins.",
+                "Check your resource utilization and see if you need more computers for your builds.",
+                "See the version and license information."
+        );
+
+        List<String> actualStatusInformationSectionsDescriptions = new HomePage(getDriver())
+                .clickManageJenkins()
+                .getStatusInformationSectionsDescriptions();
+
+        Assert.assertEquals(actualStatusInformationSectionsDescriptions, expectedStatusInformationSectionsDescriptions,
+                "Status Information sections descriptions differ from the expected ones");
+    }
 }
