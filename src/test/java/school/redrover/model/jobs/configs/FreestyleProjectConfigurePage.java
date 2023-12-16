@@ -568,7 +568,7 @@ public class FreestyleProjectConfigurePage extends BaseConfigurationPage<Freesty
     }
 
     public FreestyleProjectConfigurePage inputUsername(String username) {
-        usernameCredentialsProvider.sendKeys(username);
+        getWait2().until(ExpectedConditions.visibilityOf(usernameCredentialsProvider)).sendKeys(username);
         return this;
     }
 

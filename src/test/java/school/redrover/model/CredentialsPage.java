@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import school.redrover.model.base.BasePage;
 
+import java.util.List;
+
 public class CredentialsPage extends BasePage {
 
     @FindBy(xpath = "//span[contains(text(), 'Delete')]/ancestor::a")
@@ -38,5 +40,21 @@ public class CredentialsPage extends BasePage {
 
     public String getTextMainPanel() {
         return globalCredentialsText.getText();
+    }
+
+    public List<WebElement> findAllCredentials() {
+        return getDriver().findElements(By.xpath("//table[1]//tr"));
+    }
+    public boolean checkCredentialsByNameInTable(String name) {
+
+        List<WebElement> credentials = findAllCredentials();
+        if (credentials.size() == 1) {
+            return false;
+        } else {
+
+            return credentials.stream()
+                    .map(WebElement::getText)
+                    .anyMatch(text -> text.contains(name));
+        }
     }
 }
