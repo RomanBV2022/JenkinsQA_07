@@ -54,7 +54,7 @@ public class CredentialsPage extends BasePage {
 
             return credentials.stream()
                     .map(WebElement::getText)
-                    .anyMatch(y -> y.contains(name));
+                    .anyMatch(text -> text.contains(name));
         }
     }
 }
