@@ -51,9 +51,10 @@ public class CredentialsPage extends BasePage {
         if (credentials.size() == 1) {
             return false;
         } else {
-            boolean isFound = credentials.stream().map(x -> x.getText())
+
+            return credentials.stream()
+                    .map(WebElement::getText)
                     .anyMatch(y -> y.contains(name));
-            return true;
         }
     }
 }
