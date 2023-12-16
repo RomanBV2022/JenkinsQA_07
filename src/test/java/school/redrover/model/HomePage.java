@@ -38,7 +38,7 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//a[contains(@href, '/confirm-rename')]")
     private WebElement renameOptionProjectDropdown;
 
-    @FindBy(xpath = "//a[@href='/view/all/newJob']")
+    @FindBy(xpath = "//a[@href = '/view/all/newJob']")
     private WebElement newItemButton;
 
     @FindBy(xpath = "//div[@class = 'jenkins-table__cell__button-wrapper']/a[contains(@aria-describedby,'tippy')]")
@@ -47,10 +47,10 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(xpath = "//td//a[@href]/span")
     private WebElement multibranchPipelineNameOnHomePage;
 
-    @FindBy(xpath = "//a[@href='/asynchPeople/']")
+    @FindBy(xpath = "//a[@href = '/asynchPeople/']")
     private WebElement buttonPeople;
 
-    @FindBy(xpath = "//td[@class='pane pane-grow']")
+    @FindBy(xpath = "//td[@class = 'pane pane-grow']")
     private WebElement buildQueueSection;
 
     @FindBy(xpath = "//span[contains(text(),'My Views')]/parent::a")
@@ -74,7 +74,7 @@ public class HomePage extends BasePage<HomePage> {
     @FindBy(css = ".tab > a")
     private List<WebElement> listOfViews;
 
-    @FindBy(css = "a[href='api/']")
+    @FindBy(css = "a[href = 'api/']")
     private WebElement restApiButton;
 
     public HomePage(WebDriver driver) {
