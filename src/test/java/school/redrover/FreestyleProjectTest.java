@@ -972,17 +972,18 @@ public class FreestyleProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testCreateCredentialFromConfigurePage")
     public void testDeleteCredential() {
 
-        String expectedText = "Global credentials (unrestricted)";
-
-        String actualText = new HomePage(getDriver())
+        boolean credentialsInTable = new HomePage(getDriver())
                 .clickPeople()
                 .clickCurrentUserName()
                 .clickCredentials()
                 .clickCredentialsByName(USER_NAME_CREDENTIAL)
                 .clickDeleteButton()
                 .clickYesButton()
-                .getTextMainPanel();
+                .goHomePage()
+                .clickManageJenkins()
+                .clickCredentialsSection()
+                .checkCredentialsByNameInTable(USER_NAME_CREDENTIAL);
 
-        assertEquals(actualText, expectedText);
+        assertFalse(credentialsInTable);
     }
 }
